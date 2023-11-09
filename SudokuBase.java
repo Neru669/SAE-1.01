@@ -13,7 +13,22 @@ public class SudokuBase {
      */
     public static int saisirEntierMinMax(int min, int max){
 	//________________________________________________________
-
+        if (min > max){
+            System.out.println("L'argument min doit être inférieur ou égal à max");
+            return 0;
+        }
+        else {
+            System.out.println("veuillez saisir un nombre entre les arguments min et max");
+            Scanner input = new Scanner(System.in);
+            int nb = input.nextInt();
+            while (nb<min || nb>max){
+                System.out.println("veuillez saisir un nombre entre les arguments min et max");
+                input = new Scanner(System.in);
+                nb = input.nextInt();
+            }
+            input.close();
+            return nb;
+        }
     }  // fin saisirEntierMinMax
     //.........................................................................
 
@@ -23,6 +38,14 @@ public class SudokuBase {
      *
      */
     public static int [][] copieMatrice(int [][] mat){
+
+        int[][] copieMat = new int[mat.length][mat.length];
+        for (int i = 0; i < copieMat.length; i++) {
+            for (int j = 0; j < copieMat.length; j++) {
+                copieMat[i][j] = mat[i][j];
+            }
+        }
+        return copieMat;
 	//________________________________________________________
 
     }  // fin copieMatrice
@@ -36,7 +59,12 @@ public class SudokuBase {
      */
     public static boolean[] ensPlein(int n){
 	//_____________________________________
-
+        if (n<0){
+            System.out.println("n doit être supérieur ou égal à 0");
+            return null;
+        }
+        int [] tab_int = new int[n];
+        
     }  // fin ensPlein
 
     //.........................................................................
@@ -82,7 +110,7 @@ public class SudokuBase {
        ------------------- 
 
  
-       1 2 3 4 5 6 7 8 9
+          1 2 3 4 5 6 7 8 9
        ------------------- 
        1 |6 0 0|0 0 1|0 4 0|
        2 |0 0 0|9 6 5|0 1 2|
@@ -107,7 +135,49 @@ public class SudokuBase {
        */
     public static void afficheGrille(int k,int[][] g){
 	//__________________________________________________
+        
+        if (k==0) {
+            System.out.println("Ceci est une grille vide (k=0) : :DDD");
+        }
+        else if ((k<0 || k>3) || (g.length!=k*k || g[0].length!=k*k)){
+            System.out.println("k needs to be between 0 and 3 you dumbass and the grille must be square and have a length of k*k");
+        }
 
+        else {
+            System.err.print("   ");
+            for (int c = 1; c <= g.length; c++) {
+                System.out.print(c + " ");
+                if (c%k==0) {
+                }
+            }
+            System.out.print("\n");
+            for (int h = 0; h < 2*k*k + 3; h++) {
+                       System.out.print("-"); // k*k (chiffre) + k*k + 1 (char) + 2 (index + increment)
+                    }
+            System.out.print("\n");
+            for (int i = 0; i < g.length; i++) {
+                
+                System.out.print(i+1 + " |");
+                for (int j=0; j<g.length;j++){
+                    System.out.print(g[i][j]);
+                    if ((j+1)%k==0){
+                        System.out.print("|");
+                    }
+                    else {
+                        System.out.print(" ");
+                    }
+                }
+                if ((i+1)%k==0){
+                    System.out.print("\n");
+                    for (int h = 0; h < 2*k*k + 3; h++) {
+                       System.out.print("-"); // k*k (chiffre) + k*k + 1 (char) + 2 (index + increment)
+                    }
+                    
+                }
+                
+                System.out.print("\n");
+            }
+        }
     } // fin afficheGrille
     //.........................................................................
 

@@ -13,5 +13,7 @@ public class Sudo{
     SudokuBase.afficheGrille(2, g2);
     SudokuBase.afficheGrille(3, g3);
     SudokuBase.afficheGrille(5, g5);
+
+    // Ceci est un commentaire test bakabakabakabkabkabkabkabkabka
   }
 }

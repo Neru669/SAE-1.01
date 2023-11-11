@@ -1,8 +1,10 @@
 public class Sudo{
   public static void main(String [] args){
+    // //TEST SAISIR ENTIER entre min max
     // int a = SudokuBase.saisirEntierMinMax(9, 12);
     // System.out.println(a);
 
+    // TEST GRILLE
     int[][] g5 = new int[25][25];
     int[][] g3 = new int[9][9];
     int[][] g2 = new int[4][4];
@@ -14,6 +16,9 @@ public class Sudo{
     SudokuBase.afficheGrille(3, g3);
     SudokuBase.afficheGrille(5, g5);
 
+    //TEST DEBUT CARRE
+    int[] deb = SudokuBase.debCarre(3, 9, 9);
+    System.out.println("(" + deb[0] + ", " + deb[1] + ")");
     // Ceci est un commentaire test bakabakabakabkabkabkabkabkabka
   }
 }

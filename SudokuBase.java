@@ -185,6 +185,13 @@ public class SudokuBase {
      */
     public static int[] debCarre(int k,int i,int j){
 	//__________________________________________________
+    // verifier intervalle prerequis ?
+    // int debX = (i/k)*k ; //abscisse indice de 0 a 8
+    // int debY = (j/k)*k; //ordo
+
+    int[] debCoord = {((i - 1)/k)*k + 1, ((j - 1)/k)*k + 1}; //indice de 1 a 9
+
+    return debCoord;
 
     }  // fin debCarre
 

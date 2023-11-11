@@ -12,23 +12,16 @@ public class SudokuBase {
      *  résultat :   un entier saisi compris entre min et max, avec re-saisie éventuelle jusqu'à ce qu'il le soit
      */
     public static int saisirEntierMinMax(int min, int max){
-	//________________________________________________________
-        if (min > max){
-            System.out.println("L'argument min doit être inférieur ou égal à max");
-            return 0;
-        }
-        else {
+        System.out.println("veuillez saisir un nombre entre les arguments min et max");
+        Scanner input = new Scanner(System.in);
+        int nb = input.nextInt();
+        while (nb<min || nb>max){
             System.out.println("veuillez saisir un nombre entre les arguments min et max");
-            Scanner input = new Scanner(System.in);
-            int nb = input.nextInt();
-            while (nb<min || nb>max){
-                System.out.println("veuillez saisir un nombre entre les arguments min et max");
-                input = new Scanner(System.in);
-                nb = input.nextInt();
-            }
-            input.close();
-            return nb;
+            input = new Scanner(System.in);
+            nb = input.nextInt();
         }
+        input.close();
+        return nb;
     }  // fin saisirEntierMinMax
     //.........................................................................
 
@@ -59,12 +52,15 @@ public class SudokuBase {
      */
     public static boolean[] ensPlein(int n){
 	//_____________________________________
-        if (n<0){
-            System.out.println("n doit être supérieur ou égal à 0");
-            return null;
+        int [] tab_int = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        int [] tab_sudo = {9, 3, 6, 4, 1, 2, 8, 5, 7};
+        boolean [] tab_bool = new boolean [10];
+        for (int i = 0; i < tab_sudo.length; i ++){
+            for (int j = 0; j < tab_int.length; j++){
+                tab_bool[i] = (tab_sudo[j] == tab_int[i]);
+            }
         }
-        int [] tab_int = new int[n];
-        
+        return tab_bool;
     }  // fin ensPlein
 
     //.........................................................................

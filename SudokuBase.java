@@ -109,6 +109,8 @@ public class SudokuBase {
        9 |2 4 7|6 9 8|5 3 1|
        ------------------- 
 
+
+
  
           1 2 3 4 5 6 7 8 9
        ------------------- 
@@ -211,8 +213,36 @@ public class SudokuBase {
      *  stratégie :  les valeurs sont données dans le code
      */
     public static int [][] initGrilleComplete(){
+    //       1 2 3 4 5 6 7 8 9
+    //    ------------------- 
+    //    1 |6 2 9|7 8 1|3 4 5|
+    //    2 |4 7 3|9 6 5|8 1 2|
+    //    3 |8 1 5|2 4 3|6 9 7|
+    //    ------------------- 
+    //    4 |9 5 8|3 1 2|4 7 6|
+    //    5 |7 3 2|4 5 6|1 8 9|
+    //    6| 1 6 4|8 7 9|2 5 3|
+    //    ------------------- 
+    //    7 3 8 1|5 2 7|9 6 4
+    //    8 |5 9 6|1 3 4|7 2 8|
+    //    9 |2 4 7|6 9 8|5 3 1|
+    //    ------------------- 
 	//_________________________________________________
 
+        int [][] g = {
+            {6, 2, 9,  7, 8, 1,  3, 4, 5},
+            {4, 7, 3,  9, 6, 5,  8, 1, 2},
+            {8, 1, 5,  2, 4, 3,  6, 9, 7},
+
+            {9, 5, 8,  3, 1, 2,  4, 7, 6},
+            {7, 3, 2,  4, 5, 6,  1, 8, 9},
+            {1, 6, 4,  8, 7, 9,  2, 5, 3},
+
+            {3, 8, 1,  5, 2, 7,  9, 6, 4},
+            {5, 9, 6,  1, 3, 4,  7, 2, 8},
+            {2, 4, 7,  6, 9, 8,  5, 3, 1}
+        };
+        return g;
     } // fin initGrilleComplete
 
     //.........................................................................
@@ -221,9 +251,16 @@ public class SudokuBase {
     /** pré-requis : gSecret est une grille de Sudoku complète et 0 <= nbTrous <= 81
      *  résultat :   une grille de Sudoku incomplète pouvant être complétée en gSecret 
      *               et ayant nbTrous trous à des positions aléatoires
+     * STRAT : randomize la pos des trous entre 0 et 81
      */
     public static int [][] initGrilleIncomplete(int nbTrous, int [][] gSecret){
 	//___________________________________________________________________________
+        for (int k = 0; k < gSecret.length * gSecret.length; k++) {
+            Random r = new Random();
+            
+            i = r.nextInt(9);
+            
+        }
 
 
     } // fin initGrilleIncomplete

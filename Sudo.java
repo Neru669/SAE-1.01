@@ -20,5 +20,9 @@ public class Sudo{
     int[] deb = SudokuBase.debCarre(3, 9, 9);
     System.out.println("(" + deb[0] + ", " + deb[1] + ")");
     // Ceci est un commentaire test bakabakabakabkabkabkabkabkabka
+
+    //TEST GRILLE INIT
+    int[][] g = SudokuBase.initGrilleComplete();
+    SudokuBase.afficheGrille(3, g);
   }
 }

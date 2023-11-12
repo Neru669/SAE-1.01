@@ -1,3 +1,6 @@
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 public class Sudo{
   public static void main(String [] args){
     long startTime = System.nanoTime();
@@ -17,10 +20,9 @@ public class Sudo{
     // SudokuBase.afficheGrille(3, g3);
     // SudokuBase.afficheGrille(5, g5);
 
-    // //TEST DEBUT CARRE
-    // int[] deb = SudokuBase.debCarre(3, 9, 9);
-    // System.out.println("(" + deb[0] + ", " + deb[1] + ")");
-
+    //TEST DEBUT CARRE
+    int[] deb = SudokuBase.debCarre(3, 9, 9);
+    System.out.println("(" + deb[0] + ", " + deb[1] + ")");
     // Ceci est un commentaire test bakabakabakabkabkabkabkabkabka
 
     //TEST GRILLE INIT
@@ -45,7 +47,17 @@ public class Sudo{
     // SudokuBase.afficherMat(newMat);
 
 
-    
+    /*int[] deb = SudokuBase.debCarre(3, 9, 9);
+    System.out.println("(" + deb[0] + ", " + deb[1] + ")");
+    boolean [] gbool = SudokuBase.ensPlein(7);
+    for (int i = 0; i<gbool.length;i++){
+      if (gbool[i]==false){
+        System.out.print("False ");
+      }
+      else {
+        System.out.print("True ");
+      }
+    }*/
 
 
     //random git test from vscode

@@ -24,5 +24,7 @@ public class Sudo{
     //TEST GRILLE INIT
     int[][] g = SudokuBase.initGrilleComplete();
     SudokuBase.afficheGrille(3, g);
+
+    //random git test from vscode
   }
 }

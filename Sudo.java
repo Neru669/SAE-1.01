@@ -24,16 +24,16 @@ public class Sudo{
     // Ceci est un commentaire test bakabakabakabkabkabkabkabkabka
 
     //TEST GRILLE INIT
-    int[][] g = SudokuBase.initGrilleComplete();
-    SudokuBase.afficheGrille(3, g);
+    // int[][] g = SudokuBase.initGrilleComplete();
+    // SudokuBase.afficheGrille(3, g);
 
-    //TEST GRILLE INCOMPLETE
-    int[][] gTrou = SudokuBase.initGrilleIncomplete(79, g);
-    SudokuBase.afficheGrille(3, gTrou);
+    // //TEST GRILLE INCOMPLETE
+    // int[][] gTrou = SudokuBase.initGrilleIncomplete(79, g);
+    // SudokuBase.afficheGrille(3, gTrou);
     // int[][] listeCoordNonNul = SudokuBase.coordGrilleNonNul(gTrou);
     // SudokuBase.afficherMat(listeCoordNonNul);
 
-    
+
     //TEST ajouterelemmat et supprimerelemmat
     // int[][] mat = {{1, 2, 3}, {1, 2, 3}};
     // int[] val = {2, 2, 3, 4, 5};
@@ -50,6 +50,12 @@ public class Sudo{
 
     //random git test from vscode
     //random test 2
+
+    //TEST SAISI GRILLE INCOMPLETE
+
+    SudokuBase.saisirGrilleIncomplete(10);
+
+
 
 
     long endTime   = System.nanoTime();

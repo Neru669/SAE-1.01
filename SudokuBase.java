@@ -1,9 +1,5 @@
 import java.util.*;
 
-import javax.management.NotificationBroadcaster;
-
-import java.lang.*;
-
 public class SudokuBase {
 
     //.........................................................................
@@ -14,16 +10,15 @@ public class SudokuBase {
     /** pré-requis : min <= max
      *  résultat :   un entier saisi compris entre min et max, avec re-saisie éventuelle jusqu'à ce qu'il le soit
      */
+    private static Scanner input = new Scanner(System.in);
+
     public static int saisirEntierMinMax(int min, int max){
-        System.out.println("veuillez saisir un nombre entre les arguments min et max");
-        Scanner input = new Scanner(System.in);
+        System.out.print("Veuillez saisir un nombre entre " + min + " et " + max + " : ");
         int nb = input.nextInt();
         while (nb<min || nb>max){
-            System.out.println("veuillez saisir un nombre entre les arguments min et max");
-            input = new Scanner(System.in);
+            System.out.print("Veuillez saisir un nombre entre " + min + " et " + max + " : ");
             nb = input.nextInt();
         }
-        input.close();
         return nb;
     }  // fin saisirEntierMinMax
     //.........................................................................
@@ -379,6 +374,39 @@ public class SudokuBase {
      *  stratégie : utilise la fonction saisirEntierMinMax
      */
     public static int [][] saisirGrilleIncomplete(int nbTrous){
+
+        int k = 3;
+        int nbTrousCount = 0;
+        int[][] grille = new int[k*k][k*k];
+        
+
+
+        while (nbTrousCount != nbTrous) {
+            grille = new int[k*k][k*k];
+            afficheGrille(k, grille);
+            for (int i = 0; i < grille.length; i++) {
+                for (int j = 0; j < grille.length; j++) {
+                    System.out.println("Veuillez remplir la grille ci-dessus (saisir 0 pour un Trou), vous pouvez remplir plusieurs cases en séparant la saisie par un ou des espaces, le remplissage se fait de gauche à droite puis de haut en bas. \nVous êtes aux coordonées (" + (i+1) + ", " + (j+1) + ") : ");
+                    System.out.println("Nb de Trous requis : " + nbTrous);
+                    System.out.println("Nb de Trous saisis : " + nbTrousCount);
+                    if (nbTrousCount < nbTrous) {
+                        grille[i][j] = saisirEntierMinMax(0, 9);
+                        }
+                    else {
+                        System.out.println("Vous ne pouvez plus saisir de trous!");
+                        grille[i][j] = saisirEntierMinMax(1, 9);
+                    }
+                    // System.out.print("\033[H\033[2J");  //move console slo thats whats above is not shown
+                    // System.out.flush(); // reposition cursor
+                    afficheGrille(k, grille);
+                    if (grille[i][j] == 0) {
+                        nbTrousCount++;
+                    }
+                }   
+            }
+        }
+        input.close();
+        return grille;
 	//_________________________________________________
            
     }  // fin saisirGrilleIncomplete

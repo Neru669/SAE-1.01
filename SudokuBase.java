@@ -1,4 +1,7 @@
 import java.util.*;
+
+import javax.management.NotificationBroadcaster;
+
 import java.lang.*;
 
 public class SudokuBase {
@@ -34,7 +37,7 @@ public class SudokuBase {
 
         int[][] copieMat = new int[mat.length][mat.length];
         for (int i = 0; i < copieMat.length; i++) {
-            for (int j = 0; j < copieMat.length; j++) {
+            for (int j = 0; j < copieMat[0].length; j++) {
                 copieMat[i][j] = mat[i][j];
             }
         }
@@ -42,6 +45,63 @@ public class SudokuBase {
 	//________________________________________________________
 
     }  // fin copieMatrice
+
+
+   /**
+     * pre requis : mat de taille n x m, element de taille m
+     * action :
+     * @param mat
+     * @param elem
+     * @return : mat de taille (n+1) x m
+     */
+    public static int[][] ajouterElemMat (int[][] mat, int[] elem, int m) {
+        int[][] nouvMat = new int[mat.length + 1][m];
+        for (int i = 0; i < mat.length; i++) {
+            for (int j = 0; j < m; j++) {
+                nouvMat[i][j] = mat[i][j];
+            }
+        }
+        nouvMat[mat.length] = elem;
+        return nouvMat;
+    }
+
+    /**
+     * prerequis : mat de taille n x m, ; 0 <= indice < mat.length  
+     * action : supprime un element d'un tableau d'entier sans conserver l'ordre des elems.
+     * @param mat
+     * @param indice
+     * @return mat de taille (n - 1) x m
+     */
+
+    public static int[][] supprimerElemMat (int[][] mat, int indice) {
+        int[][] nouvMat = new int[mat.length - 1][mat[0].length]; 
+        for (int j = 0; j < mat[0].length; j++) {
+            mat[indice][j] = mat[mat.length - 1][j];
+        }
+        for (int i = 0; i < nouvMat.length; i++) {
+            for (int j = 0; j < mat[0].length; j++) {
+                nouvMat[i][j] = mat[i][j];
+            }
+        }
+        return nouvMat;
+    }
+
+    /**
+     * prerequis : mat entier e taille nx m
+     * action : affiche la matrice
+     * @param mat
+     */
+    public static void afficherMat (int [][] mat) {
+        for (int i = 0; i < mat.length; i++) {
+            for (int j = 0; j < mat[0].length; j++) {
+                System.out.print(mat[i][j] + "\t");
+            }
+            System.out.print("\n");
+        }
+        System.out.println();
+    }
+
+
 
     //.........................................................................
 
@@ -102,6 +162,8 @@ public class SudokuBase {
        9 |2 4 7|6 9 8|5 3 1|
        ------------------- 
 
+
+
  
           1 2 3 4 5 6 7 8 9
        ------------------- 
@@ -128,7 +190,7 @@ public class SudokuBase {
        */
     public static void afficheGrille(int k,int[][] g){
 	//__________________________________________________
-        
+        // prerequis non necessaire ?!
         if (k==0) {
             System.out.println("Ceci est une grille vide (k=0) : :DDD");
         }
@@ -152,7 +214,15 @@ public class SudokuBase {
                 
                 System.out.print(i+1 + " |");
                 for (int j=0; j<g.length;j++){
-                    System.out.print(g[i][j]);
+                    // pour remplacer 0 par rien :d
+                    if (g[i][j] == 0) {
+                        System.out.print(".");
+                    }
+                    else {
+                        System.out.print(g[i][j]);
+                    }
+                    
+                    // aesthetics
                     if ((j+1)%k==0){
                         System.out.print("|");
                     }
@@ -204,8 +274,36 @@ public class SudokuBase {
      *  stratégie :  les valeurs sont données dans le code
      */
     public static int [][] initGrilleComplete(){
+    //       1 2 3 4 5 6 7 8 9
+    //    ------------------- 
+    //    1 |6 2 9|7 8 1|3 4 5|
+    //    2 |4 7 3|9 6 5|8 1 2|
+    //    3 |8 1 5|2 4 3|6 9 7|
+    //    ------------------- 
+    //    4 |9 5 8|3 1 2|4 7 6|
+    //    5 |7 3 2|4 5 6|1 8 9|
+    //    6| 1 6 4|8 7 9|2 5 3|
+    //    ------------------- 
+    //    7 3 8 1|5 2 7|9 6 4
+    //    8 |5 9 6|1 3 4|7 2 8|
+    //    9 |2 4 7|6 9 8|5 3 1|
+    //    ------------------- 
 	//_________________________________________________
 
+        int [][] g = {
+            {6, 2, 9,  7, 8, 1,  3, 4, 5},
+            {4, 7, 3,  9, 6, 5,  8, 1, 2},
+            {8, 1, 5,  2, 4, 3,  6, 9, 7},
+
+            {9, 5, 8,  3, 1, 2,  4, 7, 6},
+            {7, 3, 2,  4, 5, 6,  1, 8, 9},
+            {1, 6, 4,  8, 7, 9,  2, 5, 3},
+
+            {3, 8, 1,  5, 2, 7,  9, 6, 4},
+            {5, 9, 6,  1, 3, 4,  7, 2, 8},
+            {2, 4, 7,  6, 9, 8,  5, 3, 1}
+        };
+        return g;
     } // fin initGrilleComplete
 
     //.........................................................................
@@ -214,12 +312,58 @@ public class SudokuBase {
     /** pré-requis : gSecret est une grille de Sudoku complète et 0 <= nbTrous <= 81
      *  résultat :   une grille de Sudoku incomplète pouvant être complétée en gSecret 
      *               et ayant nbTrous trous à des positions aléatoires
+     * STRAT : boucle nbTrou fois dans laquelle : lister les coord de gsecret qui sont nons nulles
+     * choisir au hazard paarmi ces coord pour supprimer la valeur =0.
      */
     public static int [][] initGrilleIncomplete(int nbTrous, int [][] gSecret){
 	//___________________________________________________________________________
+        // int i, j;
+        // i = 0; j = 0;  
+        Random r = new Random();
+        for (int k = 0; k < nbTrous; k++) {
+            
+            //METHODE CHELOU
+            // if (k < 2 * gSecret.length * gSecret.length / 3) {
+            //     i = r.nextInt(gSecret.length);
+            //     j = r.nextInt(gSecret.length);
+            //     while (i == 0 || j == 0 || gSecret[i][j] == 0) {
+            //         i = r.nextInt(gSecret.length);
+            //         j = r.nextInt(gSecret.length); 
+            //         }   
+            //     System.out.println((i+1) + " " + (j+1) + " " + gSecret[i][j]);
+            //     gSecret[i][j] = 0;         
+            // }
+            // else {
 
-
+            //METHODE AVEC TAB DE COORDS
+                int[][] listeCoordNonNulRestant = coordGrilleNonNul(gSecret);
+                //boucle
+                int indice = r.nextInt(listeCoordNonNulRestant.length);
+                gSecret[listeCoordNonNulRestant[indice][0]]
+                        [listeCoordNonNulRestant[indice][1]] 
+                        = 0;
+        }
+        return gSecret;
     } // fin initGrilleIncomplete
+
+ 
+    public static int[][] coordGrilleNonNul (int[][] g) {
+        int [][] listeCoordNonNul = new int[0][2];
+        // int compteur = 0;
+        for (int i = 0; i < g.length; i++) {
+            for (int j = 0; j < g.length; j++) {
+                if (g[i][j] != 0) {
+                    int[] coordNonNul = {i, j};
+                    listeCoordNonNul = ajouterElemMat(listeCoordNonNul, coordNonNul, 2);
+                    // compteur = compteur + 1;
+                    // System.out.println(compteur);
+                }
+            }
+        }
+        return listeCoordNonNul;
+    }
+
+
 
     //.........................................................................
 

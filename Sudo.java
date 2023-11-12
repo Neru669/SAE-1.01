@@ -25,6 +25,10 @@ public class Sudo{
     int[][] g = SudokuBase.initGrilleComplete();
     SudokuBase.afficheGrille(3, g);
 
+
+
+
+    
     //random git test from vscode
     //random test 2
   }

@@ -26,5 +26,6 @@ public class Sudo{
     SudokuBase.afficheGrille(3, g);
 
     //random git test from vscode
+    //random test 2
   }
 }

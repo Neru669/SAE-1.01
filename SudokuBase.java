@@ -191,12 +191,6 @@ public class SudokuBase {
     public static void afficheGrille(int k,int[][] g){
 	//__________________________________________________
         // prerequis non necessaire ?!
-        if (k==0) {
-            System.out.println("Ceci est une grille vide (k=0) : :DDD");
-        }
-        else if ((k<0 || k>3) || (g.length!=k*k || g[0].length!=k*k)){
-            System.out.println("k needs to be between 0 and 3 you dumbass and the grille must be square and have a length of k*k");
-        }
 
         else {
             System.err.print("   ");

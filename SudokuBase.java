@@ -52,13 +52,10 @@ public class SudokuBase {
      */
     public static boolean[] ensPlein(int n){
 	//_____________________________________
-        int [] tab_int = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-        int [] tab_sudo = {9, 3, 6, 4, 1, 2, 8, 5, 7};
+        int [] tab_int = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};/* là ça marche pour une grille de sudoku 9x9 mais pas 4x4 ni 2x2 */
         boolean [] tab_bool = new boolean [10];
-        for (int i = 0; i < tab_sudo.length; i ++){
-            for (int j = 0; j < tab_int.length; j++){
-                tab_bool[i] = (tab_sudo[j] == tab_int[i]);
-            }
+        for (int i = 0; i < tab_int.length; i++){
+            tab_bool[i] = (n == tab_int[i]);
         }
         return tab_bool;
     }  // fin ensPlein

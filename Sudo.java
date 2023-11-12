@@ -1,3 +1,6 @@
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 public class Sudo{
   public static void main(String [] args){
     // //TEST SAISIR ENTIER entre min max
@@ -19,6 +22,15 @@ public class Sudo{
     //TEST DEBUT CARRE
     int[] deb = SudokuBase.debCarre(3, 9, 9);
     System.out.println("(" + deb[0] + ", " + deb[1] + ")");
+    boolean [] gbool = SudokuBase.ensPlein(7);
+    for (int i = 0; i<gbool.length;i++){
+      if (gbool[i]==false){
+        System.out.print("False ");
+      }
+      else {
+        System.out.print("True ");
+      }
+    }
     // Ceci est un commentaire test bakabakabakabkabkabkabkabkabka
   }
 }

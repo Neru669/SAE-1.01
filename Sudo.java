@@ -25,12 +25,12 @@ public class Sudo{
     System.out.println("(" + deb[0] + ", " + deb[1] + ")");
     // Ceci est un commentaire test bakabakabakabkabkabkabkabkabka
 
-    //TEST GRILLE INIT
-    // int[][] g = SudokuBase.initGrilleComplete();
+    //TEST GRILLE Genre
+    // int[][] g = SudokuBase.genereGrilleComplete();
     // SudokuBase.afficheGrille(3, g);
 
-    // //TEST GRILLE INCOMPLETE
-    // int[][] gTrou = SudokuBase.initGrilleIncomplete(79, g);
+    // //TEST GRILLE INCOMPLETE Genere
+    // int[][] gTrou = SudokuBase.genereGrilleIncomplete(79, g);
     // SudokuBase.afficheGrille(3, gTrou);
     // int[][] listeCoordNonNul = SudokuBase.coordGrilleNonNul(gTrou);
     // SudokuBase.afficherMat(listeCoordNonNul);
@@ -66,9 +66,6 @@ public class Sudo{
     //TEST SAISI GRILLE INCOMPLETE
 
     SudokuBase.saisirGrilleIncomplete(10);
-
-
-
 
     long endTime   = System.nanoTime();
     long totalTime = endTime - startTime;

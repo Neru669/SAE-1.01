@@ -480,13 +480,37 @@ public class SudokuBase {
      * valPossibles est une matrice 9x9 de tableaux de 10 booléens
      * et nbValPoss est une matrice 9x9 d'entiers
      * action : met dans valPossibles l'ensemble des entiers de 1 à 9 pour chaque
-     * trou de gOrdi
-     * et leur nombre dans nbValPoss
+     * trou de gOrdi et leur nombre dans nbValPoss
      */
-    public static void initPleines(int[][] gOrdi, boolean[][][] valPossibles, int[][] nbValPoss) {
+    public static void initPleines(int[][] gOrdi, boolean[][][] valPossibles, int[][][] nbValPoss) {
+        // POSER QUESTION int[][] ou int[][][]
+        
         // ________________________________________________________________________________________________
+        
+        for (int i = 0; i<gOrdi.length;i++){
+            for (int j = 0; j<gOrdi[0].length;j++){
+                valPossibles[i][j] = ensPlein(gOrdi.length);
+            }    
+        }
+        for (int i = 0; i<gOrdi.length;i++){
+            for (int j = 0; j<gOrdi[0].length;j++){
+                nbValPoss[i][j] = boolToInt(gOrdi.length); //verif par rapport a ensplein ??????
+            }    
+        }
 
+
+        
     } // fin initPleines
+
+    public static int[] boolToInt(int n) {
+                // _____________________________________
+        int[] tab = new int[n+1];
+        for (int i = 1; i < tab.length; i++) {
+            tab[i] = i;
+        }
+        return tab;
+
+    }
 
     // .........................................................................
 
@@ -495,15 +519,54 @@ public class SudokuBase {
      * 0<=i<9, 0<=j<9,g[i][j]>0,
      * valPossibles est une matrice 9x9 de tableaux de 10 booléens
      * et nbValPoss est une matrice 9x9 d'entiers
-     * action : supprime dans les matrices valPossibles et nbValPoss la valeur
-     * gOrdi[i][j] pour chaque case de la ligne,
-     * de la colonne et du carré contenant la case (i,j) correspondant à un trou de
-     * gOrdi.
+     * action : supprime dans les matrices valPossibles et nbValPoss la valeur gOrdi[i][j] pour chaque case de la ligne, de la colonne et du carré contenant la case (i,j) correspondant à un trou de gOrdi.
      */
     public static void suppValPoss(int[][] gOrdi, int i, int j, boolean[][][] valPossibles, int[][] nbValPoss) {
         // _____________________________________________________________________________________________________________
+        //verif ligne/colonne/carre par TROU et supprimer 
+
+            //LIGNES
+        for (int l = 0; l<gOrdi.length; l++) {
+            if (gOrdi[i][l]>0){
+            supprime(valPossibles[i][j], gOrdi[i][l]);
+                }
+            
+        }
+
+        //COLONNES
+        for (int k = 0; k<gOrdi.length;k++){
+            if (gOrdi[k][j]>0){
+                supprime(valPossibles[k][j],gOrdi[k][j]);
+            }
+        }
+        
+        //CARRE
+        int k = racineParfaite(gOrdi.length);
+        int xDebCarre, yDebCarre;
+        xDebCarre = debCarre(k,i,j)[0];
+        yDebCarre = debCarre(k,i,j)[1];
+
+        for (int ligne = xDebCarre; ligne < xDebCarre + k; ligne++) {
+            for (int colonne = yDebCarre; colonne < yDebCarre + k; colonne++){
+                if (gOrdi[ligne][colonne]>0){
+                    supprime(valPossibles[ligne][colonne],gOrdi[ligne][colonne]);
+                }
+            }
+        }
 
     } // fin suppValPoss
+
+
+    
+    public static int racineParfaite(int n) {
+            int tmp;
+            int d = n / 2;
+            do {
+            tmp = d;
+            d = (tmp + (n / tmp)) / 2;
+            } while ((tmp - d) != 0);
+            return d;
+        }
 
     // .........................................................................
 

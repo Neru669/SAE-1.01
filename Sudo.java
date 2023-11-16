@@ -69,13 +69,20 @@ public class Sudo{
     // long endTime   = System.nanoTime();
     // long totalTime = endTime - startTime;
     // System.out.println(totalTime / 1e9);
-    boolean[] bp = SudokuBase.ensPlein(6);
-    System.out.println(Arrays.toString(bp));
-    SudokuBase.supprime(bp, 4);
-    System.out.println(Arrays.toString(bp));
-    System.out.println(SudokuBase.uneValeur(bp));
+    // boolean[] bp = SudokuBase.ensPlein(6);
+    // System.out.println(Arrays.toString(bp));
+    // SudokuBase.supprime(bp, 4);
+    // System.out.println(Arrays.toString(bp));
+    // System.out.println(SudokuBase.uneValeur(bp));
     
-    SudokuBase.saisirGrilleIncomplete(10);
+    // SudokuBase.saisirGrilleIncomplete(10);
+
+    boolean [][][] valPossibles = new boolean[9][9][9];
+    int [][] gOrdie = new int [9][9];
+
+    SudokuBase.initPleines(gOrdie, valPossibles, null);
+    System.out.println(Arrays.deepToString(valPossibles));
+    
 
     long endTime   = System.nanoTime();
     long totalTime = endTime - startTime;

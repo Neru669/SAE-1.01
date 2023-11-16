@@ -6,6 +6,13 @@
       "name": "Sudo",
       "request": "launch",
       "mainClass": "Sudo",
+      "projectName": "Sudoku_9f803d3b"
+    },
+    {
+      "type": "java",
+      "name": "Sudo",
+      "request": "launch",
+      "mainClass": "Sudo",
       "projectName": "Sudoku_aba7dace"
     },
     {

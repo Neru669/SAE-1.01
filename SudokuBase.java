@@ -24,23 +24,22 @@ public class SudokuBase {
     } // fin saisirEntierMinMax
       // .........................................................................
 
-    /**
-     * pré-requis : aucun
-     * résultat : une copie de mat
-     *
-     */
-    public static int[][] copieMatrice(int[][] mat) {
 
-        int[][] copieMat = new int[mat.length][mat.length];
-        for (int i = 0; i < copieMat.length; i++) {
-            for (int j = 0; j < copieMat[0].length; j++) {
-                copieMat[i][j] = mat[i][j];
+ /** MODIFICI
+     *  pré-requis : mat1 et mat2 ont les mêmes dimensions
+     *  action : copie toutes les valeurs de mat1 dans mat2 de sorte que mat1 et mat2 soient identiques
+     */
+    public static void copieMatrice(int[][] mat1, int[][] mat2){
+        //________________________________________________________
+        for (int i = 0; i < mat1.length; i++) {
+            for (int j = 0; j < mat1[0].length; j++) {
+                mat2[i][j] = mat1[i][j];
             }
         }
-        return copieMat;
-        // ________________________________________________________
+        }  // fin copieMatrice
 
-    } // fin copieMatrice
+        
+
 
     /**
      * pre requis : mat de taille n x m, element de taille m
@@ -280,27 +279,53 @@ public class SudokuBase {
     // Initialisation
     // .........................................................................
 
-    /**
-     * pré-requis : aucun
-     * résultat : une grille de Sudoku complète
-     * stratégie : les valeurs sont données dans le code
+
+    /** MODIFICI
+     *  pré-requis : gComplete est une matrice 9X9
+     *  action   :   remplit gComplete pour que la grille de Sudoku correspondante soit complète
+     *  stratégie :  les valeurs sont données directement dans le code et on peut utiliser copieMatrice pour mettre à jour gComplete
      */
-    public static int[][] initGrilleComplete() {
-        // 1 2 3 4 5 6 7 8 9
-        // -------------------
-        // 1 |6 2 9|7 8 1|3 4 5|
-        // 2 |4 7 3|9 6 5|8 1 2|
-        // 3 |8 1 5|2 4 3|6 9 7|
-        // -------------------
-        // 4 |9 5 8|3 1 2|4 7 6|
-        // 5 |7 3 2|4 5 6|1 8 9|
-        // 6| 1 6 4|8 7 9|2 5 3|
-        // -------------------
-        // 7 3 8 1|5 2 7|9 6 4
-        // 8 |5 9 6|1 3 4|7 2 8|
-        // 9 |2 4 7|6 9 8|5 3 1|
-        // -------------------
-        // _________________________________________________
+    public static void initGrilleComplete(int [][] gComplete){
+        //_________________________________________________
+        int [][] g = {
+            {6, 2, 9,  7, 8, 1,  3, 4, 5},
+            {4, 7, 3,  9, 6, 5,  8, 1, 2},
+            {8, 1, 5,  2, 4, 3,  6, 9, 7},
+
+            {9, 5, 8,  3, 1, 2,  4, 7, 6},
+            {7, 3, 2,  4, 5, 6,  1, 8, 9},
+            {1, 6, 4,  8, 7, 9,  2, 5, 3},
+
+            {3, 8, 1,  5, 2, 7,  9, 6, 4},
+            {5, 9, 6,  1, 3, 4,  7, 2, 8},
+            {2, 4, 7,  6, 9, 8,  5, 3, 1}
+        };
+        copieMatrice(g, gComplete);
+        } // fin initGrilleComplete
+
+
+
+
+    /** pré-requis : aucun
+     *  résultat :   une grille de Sudoku complète
+     *  stratégie :  les valeurs sont données dans le code
+     */
+    public static int [][] genereGrilleComplete(){
+    //       1 2 3 4 5 6 7 8 9
+    //    ------------------- 
+    //    1 |6 2 9|7 8 1|3 4 5|
+    //    2 |4 7 3|9 6 5|8 1 2|
+    //    3 |8 1 5|2 4 3|6 9 7|
+    //    ------------------- 
+    //    4 |9 5 8|3 1 2|4 7 6|
+    //    5 |7 3 2|4 5 6|1 8 9|
+    //    6| 1 6 4|8 7 9|2 5 3|
+    //    ------------------- 
+    //    7 3 8 1|5 2 7|9 6 4
+    //    8 |5 9 6|1 3 4|7 2 8|
+    //    9 |2 4 7|6 9 8|5 3 1|
+    //    ------------------- 
+	//_________________________________________________
 
         int[][] g = {
                 { 6, 2, 9, 7, 8, 1, 3, 4, 5 },
@@ -318,18 +343,44 @@ public class SudokuBase {
         return g;
     } // fin initGrilleComplete
 
-    // .........................................................................
+    //.........................................................................
 
-    /**
-     * pré-requis : gSecret est une grille de Sudoku complète et 0 <= nbTrous <= 81
-     * résultat : une grille de Sudoku incomplète pouvant être complétée en gSecret
-     * et ayant nbTrous trous à des positions aléatoires
-     * STRAT : boucle nbTrou fois dans laquelle : lister les coord de gsecret qui
-     * sont nons nulles
+     /** MODIFICI
+     *  pré-requis : gSecret est une grille de Sudoku complète de mêmes dimensions que gIncomplete et 0 <= nbTrous <= 81
+     *  action :     modifie gIncomplete pour qu'elle corresponde à une version incomplète de la grille de Sudoku gSecret (gIncomplete peut être complétée en gSecret), 
+     *               avec nbTrous trous à des positions aléatoires
+     * STRAT : boucle nbTrou fois dans laquelle : lister les coord de gsecret qui sont nons nulles
      * choisir au hazard paarmi ces coord pour supprimer la valeur =0.
      */
-    public static int[][] initGrilleIncomplete(int nbTrous, int[][] gSecret) {
-        // ___________________________________________________________________________
+    public static void initGrilleIncomplete(int nbTrous, int [][] gSecret, int[][] gIncomplete){
+        //___________________________________________________________________________
+        copieMatrice(gSecret, gIncomplete);
+        Random r = new Random();
+        for (int k = 0; k < nbTrous; k++) {
+            
+        //METHODE AVEC TAB DE COORDS
+            int[][] listeCoordNonNulRestant = coordGrilleNonNul(gIncomplete);
+            //boucle
+            int indice = r.nextInt(listeCoordNonNulRestant.length);
+            gIncomplete[listeCoordNonNulRestant[indice][0]]
+                    [listeCoordNonNulRestant[indice][1]] 
+                    = 0;
+        }
+        
+        } // fin initGrilleIncomplete
+
+
+
+        
+
+    /** pré-requis : gSecret est une grille de Sudoku complète et 0 <= nbTrous <= 81
+     *  résultat :   une grille de Sudoku incomplète pouvant être complétée en gSecret 
+     *               et ayant nbTrous trous à des positions aléatoires
+     * STRAT : boucle nbTrou fois dans laquelle : lister les coord de gsecret qui sont nons nulles
+     * choisir au hazard paarmi ces coord pour supprimer la valeur =0.
+     */
+    public static int [][] genereGrilleIncomplete(int nbTrous, int [][] gSecret){
+	//___________________________________________________________________________
         // int i, j;
         // i = 0; j = 0;
         Random r = new Random();

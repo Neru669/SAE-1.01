@@ -65,13 +65,14 @@ public class Sudo{
 
     //TEST SAISI GRILLE INCOMPLETE
 
-    SudokuBase.saisirGrilleIncomplete(10);
-
-
-
-
-    long endTime   = System.nanoTime();
-    long totalTime = endTime - startTime;
-    System.out.println(totalTime / 1e9);
+    // SudokuBase.saisirGrilleIncomplete(10);
+    // long endTime   = System.nanoTime();
+    // long totalTime = endTime - startTime;
+    // System.out.println(totalTime / 1e9);
+    boolean[] bp = SudokuBase.ensPlein(6);
+    System.out.println(Arrays.toString(bp));
+    SudokuBase.supprime(bp, 4);
+    System.out.println(Arrays.toString(bp));
+    System.out.println(SudokuBase.uneValeur(bp));
   }
 }

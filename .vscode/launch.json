@@ -1,0 +1,20 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Sudo",
+      "request": "launch",
+      "mainClass": "Sudo",
+      "projectName": "Sudoku_aba7dace"
+    },
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "/Users/heloiserigaux/Desktop/school/Dev/SAE 1.1 Sudoku/Sudoku",
+      "program": "/Users/heloiserigaux/Desktop/school/Dev/SAE 1.1 Sudoku/Sudoku/build/Debug/outDebug"
+    }
+  ]
+}

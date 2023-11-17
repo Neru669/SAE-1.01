@@ -265,10 +265,14 @@ public class SudokuBase {
     public static int[] debCarre(int k, int i, int j) {
         // __________________________________________________
         // verifier intervalle prerequis ?
-        // int debX = (i/k)*k ; //abscisse indice de 0 a 8
-        // int debY = (j/k)*k; //ordo
+        int debX = (i/k)*k ; //abscisse indice de 0 a 8
+        int debY = (j/k)*k; //ordo
 
-        int[] debCoord = { ((i - 1) / k) * k + 1, ((j - 1) / k) * k + 1 }; // indice de 1 a 9
+        int [] debCoord = {debX, debY};
+
+        // int[] debCoord = { ((i - 1) / k) * k + 1, ((j - 1) / k) * k + 1 }; // indice de 1 a 9
+
+    
 
         return debCoord;
 
@@ -482,25 +486,34 @@ public class SudokuBase {
      * action : met dans valPossibles l'ensemble des entiers de 1 à 9 pour chaque
      * trou de gOrdi et leur nombre dans nbValPoss
      */
-    public static void initPleines(int[][] gOrdi, boolean[][][] valPossibles, int[][][] nbValPoss) {
-        // POSER QUESTION int[][] ou int[][][]
+    public static void initPleines(int[][] gOrdi, boolean[][][] valPossibles, int[][] nbValPoss) {
+        // POSER QUESTION int[][] LE NOMBRE DE VAL POSSIBLE (pas les valeurs en soit) ou int[][][]
         
         // ________________________________________________________________________________________________
         
         for (int i = 0; i<gOrdi.length;i++){
             for (int j = 0; j<gOrdi[0].length;j++){
-                valPossibles[i][j] = ensPlein(gOrdi.length);
+                if (gOrdi[i][j] == 0) {
+                    valPossibles[i][j] = ensPlein(gOrdi.length);
+                    nbValPoss[i][j] = gOrdi.length;
+                }
+                else {
+                    nbValPoss[i][j] = 0;
+                }
             }    
         }
-        for (int i = 0; i<gOrdi.length;i++){
-            for (int j = 0; j<gOrdi[0].length;j++){
-                nbValPoss[i][j] = boolToInt(gOrdi.length); //verif par rapport a ensplein ??????
-            }    
-        }
+
+        
+
+        // for (int i = 0; i<gOrdi.length;i++){
+        //     for (int j = 0; j<gOrdi[0].length;j++){
+        //         nbValPoss[i][j] = boolToInt(gOrdi.length); //verif par rapport a ensplein ??????
+        //     }    
+        // }
 
 
         
-    } // fin initPleines
+    } // fin initPleines INUTILE POUR LINSTANT
 
     public static int[] boolToInt(int n) {
                 // _____________________________________
@@ -525,18 +538,24 @@ public class SudokuBase {
         // _____________________________________________________________________________________________________________
         //verif ligne/colonne/carre par TROU et supprimer 
 
-            //LIGNES
+            // LIGNES
         for (int l = 0; l<gOrdi.length; l++) {
             if (gOrdi[i][l]>0){
-            supprime(valPossibles[i][j], gOrdi[i][l]);
+                boolean check = supprime(valPossibles[i][j], gOrdi[i][l]);
+                if (check){
+                    nbValPoss[i][j] = nbValPoss[i][j] - 1;
                 }
+            }
             
         }
 
         //COLONNES
         for (int k = 0; k<gOrdi.length;k++){
             if (gOrdi[k][j]>0){
-                supprime(valPossibles[k][j],gOrdi[k][j]);
+                boolean check = supprime(valPossibles[i][j],gOrdi[k][j]);
+                if (check){
+                    nbValPoss[i][j] = nbValPoss[i][j] - 1;
+                }
             }
         }
         
@@ -549,7 +568,10 @@ public class SudokuBase {
         for (int ligne = xDebCarre; ligne < xDebCarre + k; ligne++) {
             for (int colonne = yDebCarre; colonne < yDebCarre + k; colonne++){
                 if (gOrdi[ligne][colonne]>0){
-                    supprime(valPossibles[ligne][colonne],gOrdi[ligne][colonne]);
+                    boolean check = supprime(valPossibles[i][j], gOrdi[ligne][colonne]);
+                    if (check){
+                        nbValPoss[i][j] = nbValPoss[i][j] - 1;
+                    }
                 }
             }
         }
@@ -580,30 +602,38 @@ public class SudokuBase {
      */
     public static void initPossibles(int[][] gOrdi, boolean[][][] valPossibles, int[][] nbValPoss) {
         // ________________________________________________________________________________________________
-
+        initPleines(gOrdi, valPossibles, nbValPoss);
+        for (int i = 0; i<gOrdi.length;i++){
+            for (int j = 0; j<gOrdi.length;j++){
+                suppValPoss(gOrdi,i,j,valPossibles,nbValPoss);
+            }
+        }
     } // fin initPossibles
 
     // .........................................................................
 
     /**
      * pré-requis : gSecret, gHumain et gOrdi sont des grilles 9x9
-     * action : demande au joueur humain de saisir le nombre nbTrous compris entre 0
-     * et 81,
+     * action : demande au joueur humain de saisir le nombre nbTrous compris entre 0 et 81,
      * met dans gSecret une grille de Sudoku complète,
-     * met dans gHumain une grille de Sudoku incomplète, pouvant être complétée en
-     * gSecret
-     * et ayant exactement nbTrous trous de positions aléatoires,
-     * met dans gOrdi une grille de Sudoku incomplète saisie par le joueur humain
-     * ayant nbTrous trous,
-     * met dans valPossibles l'ensemble des valeurs possibles de chaque trou de
-     * gOrdi
-     * et leur nombre dans nbValPoss.
+     * met dans gHumain une grille de Sudoku incomplète, pouvant être complétée en gSecret et ayant exactement nbTrous trous de positions aléatoires,
+     * met dans gOrdi une grille de Sudoku incomplète saisie par le joueur humain ayant nbTrous trous,
+     * met dans valPossibles l'ensemble des valeurs possibles de chaque trou de gOrdi et leur nombre dans nbValPoss.
      * retour : la valeur de nbTrous
      */
-    public static int initPartie(int[][] gSecret, int[][] gHumain, int[][] gOrdi, boolean[][][] valPossibles,
-            int[][] nbValPoss) {
+    public static int initPartie(int[][] gSecret, int[][] gHumain, int[][] gOrdi, boolean[][][] valPossibles, int[][] nbValPoss) {
         // ______________________________________________________________________________________________
-
+        int nb = 82;
+        while (nb<0 || nb>81){
+            System.out.println("Please enter a number between 0 and 81. Those stand for the number of holes to complete.");
+            nb = input.nextInt();
+        }
+        initGrilleComplete(gSecret);
+        initGrilleIncomplete(nb, gSecret, gHumain);
+        gOrdi = saisirGrilleIncomplete(nb);
+        initPossibles(gOrdi,valPossibles, nbValPoss);
+        
+        return nb;
     } // fin initPartie
 
     // ...........................................................
@@ -612,8 +642,7 @@ public class SudokuBase {
 
     /**
      * pré-requis : gHumain est une grille de Sudoju incomplète pouvant se compléter
-     * en
-     * la grille de Sudoku complète gSecret
+     * en la grille de Sudoku complète gSecret
      *
      * résultat : le nombre de points de pénalité pris par le joueur humain pendant
      * le tour de jeu

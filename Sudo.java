@@ -94,20 +94,22 @@ public class Sudo{
     int [][] gOrdie = new int [9][9];
     int [][] nbValPoss = new int[9][9];
 
-    SudokuBase.initPleines(grilleInc, valPossibles, nbValPoss);
-    // System.out.println(Arrays.deepToString(valPossibles));
-    // System.out.println(Arrays.deepToString(nbValPoss));
+    // SudokuBase.initPleines(grilleInc, valPossibles, nbValPoss);
+    // // System.out.println(Arrays.deepToString(valPossibles));
+    // // System.out.println(Arrays.deepToString(nbValPoss));
+
+    // // SudokuBase.afficheGrille(3, nbValPoss);
+
+    // SudokuBase.suppValPoss(grilleInc, 0, 3, valPossibles, nbValPoss);
+    
+    // // SudokuBase.afficheGrille(3, nbValPoss);
+    
+    // SudokuBase.initPossibles(grilleInc, valPossibles, nbValPoss);
 
     // SudokuBase.afficheGrille(3, nbValPoss);
 
-    SudokuBase.suppValPoss(grilleInc, 0, 3, valPossibles, nbValPoss);
+    SudokuBase.initPartie(grilleComp, grilleInc, gOrdie, valPossibles, nbValPoss);
     
-    // SudokuBase.afficheGrille(3, nbValPoss);
-    
-    SudokuBase.initPossibles(grilleInc, valPossibles, nbValPoss);
-
-    SudokuBase.afficheGrille(3, nbValPoss);
-
     long endTime   = System.nanoTime();
     long totalTime = endTime - startTime;
     System.out.println(totalTime / 1e9);

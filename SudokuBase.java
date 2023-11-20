@@ -430,6 +430,47 @@ public class SudokuBase {
 
     // .........................................................................
 
+    /** MODIFICI
+     *  pré-requis : 0 <= nbTrous <= 81 ; g est une grille 9x9 (vide a priori)
+     *  action :   remplit g avec des valeurs saisies au clavier comprises entre 0 et 9
+     *               avec exactement nbTrous valeurs nulles
+     *               et avec re-saisie jusqu'à ce que ces conditions soient vérifiées.
+     *               On suppose dans la version de base que la grille saisie est bien une grille de Sudoku incomplète.
+     *  stratégie : utilise la fonction saisirEntierMinMax
+     */
+
+     public static void saisirGrilleIncomplete(int nbTrous, int [][] grille){
+        //_________________________________________________
+        int k = 3;
+        int nbTrousCount = 0;
+        while (nbTrousCount != nbTrous) {
+            grille = new int[k * k][k * k];
+            afficheGrille(k, grille);
+            for (int i = 0; i < grille.length; i++) {
+                for (int j = 0; j < grille.length; j++) {
+                    System.out.println(
+                            "Veuillez remplir la grille ci-dessus (saisir 0 pour un Trou), vous pouvez remplir plusieurs cases en séparant la saisie par un ou des espaces, le remplissage se fait de gauche à droite puis de haut en bas. \nVous êtes aux coordonées ("
+                                    + (i + 1) + ", " + (j + 1) + ") : ");
+                    System.out.println("Nb de Trous requis : " + nbTrous);
+                    System.out.println("Nb de Trous saisis : " + nbTrousCount);
+                    if (nbTrousCount < nbTrous) {
+                        grille[i][j] = saisirEntierMinMax(0, 9);
+                    } else {
+                        System.out.println("Vous ne pouvez plus saisir de trous!");
+                        grille[i][j] = saisirEntierMinMax(1, 9);
+                    }
+                    // System.out.print("\033[H\033[2J"); //move console slo thats whats above is
+                    // not shown
+                    // System.out.flush(); // reposition cursor
+                    afficheGrille(k, grille);
+                    if (grille[i][j] == 0) {
+                        nbTrousCount++;
+                    }
+                }
+            }
+        }
+        input.close();
+        }  // fin saisirGrilleIncomplete
     /**
      * pré-requis : 0 <= nbTrous <= 81
      * résultat : une grille 9x9 saisie dont les valeurs sont comprises ente 0 et 9
@@ -439,7 +480,7 @@ public class SudokuBase {
      * de Sudoku incomplète.
      * stratégie : utilise la fonction saisirEntierMinMax
      */
-    public static int[][] saisirGrilleIncomplete(int nbTrous) {
+    public static int[][] saisirGrilleIncompleteOLD(int nbTrous) {
 
         int k = 3;
         int nbTrousCount = 0;
@@ -630,7 +671,7 @@ public class SudokuBase {
         }
         initGrilleComplete(gSecret);
         initGrilleIncomplete(nb, gSecret, gHumain);
-        gOrdi = saisirGrilleIncomplete(nb);
+        saisirGrilleIncomplete(nb, gOrdi);
         initPossibles(gOrdi,valPossibles, nbValPoss);
         
         return nb;

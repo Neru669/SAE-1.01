@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "SudokuBase",
+      "request": "launch",
+      "mainClass": "SudokuBase",
+      "projectName": "Sudoku_9f803d3b"
+    },
+    {
+      "type": "java",
       "name": "Sudo",
       "request": "launch",
       "mainClass": "Sudo",

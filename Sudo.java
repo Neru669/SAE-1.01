@@ -88,7 +88,7 @@ public class Sudo{
 
     SudokuBase.initGrilleComplete(grilleComp);
     SudokuBase.initGrilleIncomplete(10, grilleComp, grilleInc);
-    SudokuBase.afficheGrille(3, grilleInc);
+    SudokuBase.afficheGrille(3, grilleComp);
 
     boolean [][][] valPossibles = new boolean[9][9][10];
     int [][] gOrdie = new int [9][9];
@@ -109,6 +109,7 @@ public class Sudo{
     // SudokuBase.afficheGrille(3, nbValPoss);
 
     SudokuBase.initPartie(grilleComp, grilleInc, gOrdie, valPossibles, nbValPoss);
+    SudokuBase.tourHumain(grilleComp, grilleInc);
     
     long endTime   = System.nanoTime();
     long totalTime = endTime - startTime;

@@ -674,7 +674,8 @@ public class SudokuBase {
         }
         initGrilleComplete(gSecret);
         initGrilleIncomplete(nb, gSecret, gHumain);
-        saisirGrilleIncomplete(nb, gOrdi);
+        // saisirGrilleIncomplete(nb, gOrdi); //vrai
+        initGrilleIncomplete(nb, gSecret, gOrdi); //test
         initPossibles(gOrdi, valPossibles, nbValPoss);
 
         return nb;
@@ -707,48 +708,76 @@ public class SudokuBase {
         // 
         // ___________________________________________________________________
         int pen = 0;
-        afficheGrille(3, gHumain);
-        System.out.println("Veuillez choisir les coordonnées d'un trou à remplir (lignes, colonnes) : ");
-        System.out.print("(i = ");
-        int i = input.nextInt();
-        System.out.print(", j = ");
-        int j = input.nextInt();
-        System.out.print(")\n");
+        boolean boolTrou = false;
 
-        while (gHumain[i][j] != 0) {
-            System.out.println("Veuillez choisir les coordonnées d'un trou remplissable à remplir (lignes, colonnes) : ");
-            System.out.print("(i = ");
-            i = input.nextInt();
-            System.out.print(", j = ");
-            j = input.nextInt();
-            System.out.print(")\n");   
-        }
+        String [] possibleAnsYes = {"Y", "y", "yes", "Yes", "YES"};
+        String [] possibleAnsNo = {"N", "n", "no", "No", "NO"};
+        
+       
+        while (!boolTrou) {
+            afficheGrille(3, gHumain);
+            System.out.println("Veuillez choisir les coordonnées d'un trou à remplir (lignes, colonnes) : ");
+            System.out.print("i = ");
+            int i = input.nextInt() - 1;
+            System.out.print("j = ");
+            int j = input.nextInt() - 1;
 
-        while (gHumain[i][j] != gSecret[i][j]) {
-            System.out.println("Voulez-vous former un pacte avec le joker ? ;) il vous aidera grandement dans votre quête, mais à chaque utilisation, vous perdez des points (but we dont talk abt it shhhhh). Make your choice and enter Y/N or yes/no");
-
-            String ans = input.next();
-
-            while (ans != "Y" || ans != "y" || ans != "Yes" || ans != "yes" || ans != "YES" || ans != "N" || ans != "n" || ans != "No" || ans != "no" || ans != "NO" ) {
-                ans = input.next();
+            while (gHumain[i][j] != 0) {
+                System.out.println("Veuillez choisir les coordonnées d'un trou remplissable à remplir (lignes, colonnes) : ");
+                System.out.print("i = ");
+                i = input.nextInt() - 1;
+                System.out.print("j = ");
+                j = input.nextInt() - 1;  
             }
 
-            if (ans == "Y" || ans == "y" || ans == "Yes" || ans == "yes" || ans == "YES" ) {
+            System.out.println("Voulez-vous former un pacte avec le joker ? ;) il vous aidera grandement dans votre quête, mais à chaque utilisation, vous perdez des points (but we dont talk abt it shhhhh). Make your choice and enter Y/N or yes/no");
+
+            String ans = input.nextLine();
+
+            while (!verifyStringFromTabString(ans, possibleAnsYes) && 
+                    !verifyStringFromTabString(ans, possibleAnsNo)) {
+                ans = input.nextLine();
+                System.out.println(ans);
+            }
+
+            if (verifyStringFromTabString(ans, possibleAnsYes)) {
                     pen = pen + 1; //penalité
                     gHumain[i][j] = gSecret[i][j];
+                    boolTrou = true;
             }
             else {
                 System.out.println("Choisissez le nombre pour remplir cette case:");
                 int ansTrou = saisirEntierMinMax(1, gSecret.length);
                 if (ansTrou != gSecret[i][j]){
                     pen = pen + 1;
+                    System.out.println("Dommage, try again :/ ");
+                }
+                else {
+                    gHumain[i][j] = gSecret[i][j];
+                    boolTrou = true;
                 }
             }
         }
         afficheGrille(3, gHumain);
+        System.out.println("Au tour de Ordi :");
         return pen;
     } // fin tourHumain
 
+    /**
+     * action : verifier si un string est contenu dans un tab de String
+     *
+     * @param in
+     * @param tabString
+     * @return boolean true si oui false sinon
+     */
+    public static boolean verifyStringFromTabString(String in, String[] tabString) {
+        for (String elem : tabString) {
+            if (in.equals(elem)) {
+                return true;
+            }
+        }
+        return false;
+    }
     // .........................................................................
 
     // Tour de l'ordinateur
@@ -765,8 +794,9 @@ public class SudokuBase {
     public static int[] chercheTrou(int[][] gOrdi, int[][] nbValPoss) {
         // ___________________________________________________________________
         int i = 0, j = 0;
-        while (i<gOrdi.length || nbValPoss[i][j]!=1 ){
-            while (j<gOrdi[i].length || nbValPoss[i][j]!=1){
+        while (i<gOrdi.length && nbValPoss[i][j]!=1 ){
+            j = 0;
+            while (j<gOrdi[i].length && nbValPoss[i][j]!=1){
                 j = j + 1;
             }
             i = i + 1;
@@ -774,9 +804,9 @@ public class SudokuBase {
         
         if (nbValPoss[i][j]!=1){
             i = 0;
-            j = 0;
-            while (i<gOrdi.length || gOrdi[i][j]!=0 ){
-                while (j<gOrdi[i].length || gOrdi[i][j]!=0){
+            while (i<gOrdi.length && gOrdi[i][j]!=0 ){
+                j = 0;
+                while (j<gOrdi[i].length && gOrdi[i][j]!=0){
                     j = j + 1;
                 }
                 i = i + 1;

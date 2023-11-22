@@ -827,7 +827,23 @@ public class SudokuBase {
      */
     public static int tourOrdinateur(int[][] gOrdi, boolean[][][] valPossibles, int[][] nbValPoss) {
         // ________________________________________________________________________________________________
-        
+        ///étape 1: vérifier si trou évident, si oui le remplir. Si pls trous évidents choisir le premier. Sinon ordi prend un joker. L'humain saisi la bonne valeur du premier trou. Si humain rentre mauvaise valeur humain le dit et
+        int [] tab = chercheTrou(gOrdi, nbValPoss);
+        int k = 0, ans;
+        if (nbValPoss[tab[0]][tab[1]] == 1){ ///evident
+            while (k<valPossibles[tab[0]][tab[1]].length && valPossibles[tab[0]][tab[1]][k]!=true){
+                k = k + 1;
+            }
+            gOrdi[tab[0]][tab[1]] = k;
+            return 0;
+        }
+        else {
+            System.out.println("I do not seem to find the correct answer. Could you fill the hole in " + tab[0] + " and " + tab[1] + " for me pretty plz?");
+            ans = input.nextInt();
+            gOrdi[tab[0]][tab[1]] = ans;
+            return 1;
+        }
+
     } // fin tourOrdinateur
 
     // .........................................................................
@@ -843,7 +859,7 @@ public class SudokuBase {
      */
     public static int partie() {
         // _____________________________
-
+        
     } // fin partie
 
     // .........................................................................

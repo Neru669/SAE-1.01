@@ -1,4 +1,4 @@
-import java.lang.reflect.Array;
+
 import java.util.Arrays;
 
 public class Sudo{
@@ -91,7 +91,7 @@ public class Sudo{
     SudokuBase.afficheGrille(3, grilleComp);
 
     boolean [][][] valPossibles = new boolean[9][9][10];
-    int [][] gOrdie = new int [9][9];
+    int [][] gOrdi = new int [9][9];
     int [][] nbValPoss = new int[9][9];
 
     // SudokuBase.initPleines(grilleInc, valPossibles, nbValPoss);
@@ -108,8 +108,20 @@ public class Sudo{
 
     // SudokuBase.afficheGrille(3, nbValPoss);
 
-    SudokuBase.initPartie(grilleComp, grilleInc, gOrdie, valPossibles, nbValPoss);
-    SudokuBase.tourHumain(grilleComp, grilleInc);
+    SudokuBase.initPartie(grilleComp, grilleInc, gOrdi, valPossibles, nbValPoss);
+    // SudokuBase.tourHumain(grilleComp, grilleInc);
+    SudokuBase.afficheGrille(3, gOrdi);
+    SudokuBase.afficheGrille(3, nbValPoss);
+
+    int[] coordTrou = SudokuBase.chercheTrou(gOrdi, nbValPoss);
+
+    System.out.println(Arrays.toString(coordTrou));
+
+    int penOrdi = SudokuBase.tourOrdinateur(gOrdi, valPossibles, nbValPoss);
+
+    // SudokuBase.afficheGrille(3, gOrdie);
+
+    System.out.println(penOrdi);
     
     long endTime   = System.nanoTime();
     long totalTime = endTime - startTime;

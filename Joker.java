@@ -729,11 +729,19 @@ public class Joker {
      */
     public static int[] chercheTrou(int[][] gOrdi, int[][] nbValPoss) {
         // ___________________________________________________________________
-        int k = 0;
+        int k = 0, m = 0;
         int[] tab = { -1, -1 };
 
         for (int i = 0; i < gOrdi.length; i++) {
             for (int j = 0; j < gOrdi[i].length; j++) {
+
+                if (nbValPoss[i][j] == 2 && m == 0) {
+                    tab[0] = i;
+                    tab[1] = j;
+                    k = 1;
+                    m = 1;
+                }
+
                 if (gOrdi[i][j] == 0 && k == 0) {
                     tab[0] = i;
                     tab[1] = j;
@@ -775,6 +783,9 @@ public class Joker {
                 k = k + 1;
             }
             gOrdi[tab[0]][tab[1]] = k;
+            // RETIRERE CE QUI A ETE AJOUTE EYEYE
+            valPossibles[tab[0]][tab[1]][k] = false;
+            nbValPoss[tab[0]][tab[1]] = 0;
             return 0;
         }
 
@@ -785,6 +796,9 @@ public class Joker {
                 // STOCKER LES DEUX VAL
                 if (valPossibles[tab[0]][tab[1]][k] == true) {
                     valposs[count] = k;
+                    // RETIRERE CE QUI A ETE AJOUTE EYEYE
+                    valPossibles[tab[0]][tab[1]][k] = false;
+                    nbValPoss[tab[0]][tab[1]]--;
                     count = count + 1;
                 }
                 k = k + 1;
@@ -794,7 +808,7 @@ public class Joker {
             int valChoix = r.nextInt(2);
 
             // VERIFIER SI JUSTE
-            System.out.println("Ordi entre " + valposs[valChoix] + " aux coordonées (" + tab[0] + "" + tab[1] + ").");
+            System.out.println("Ordi entre " + valposs[valChoix] + " aux coordonées (" + (tab[0]+1) + ", " + (tab[1]+1) + ").");
 
             System.out.println("Est-ce juste ? (Yes/No ou Y/N) : ");
 
@@ -810,18 +824,17 @@ public class Joker {
 
             if (verifyStringFromTabString(ans, possibleAnsYes)) {
                 gOrdi[tab[0]][tab[1]] = valposs[valChoix];
+
                 return 0;
             } else {
-                valChoix = (valChoix - 1) * 1;
+                valChoix = (valChoix - 1) * (-1);
                 gOrdi[tab[0]][tab[1]] = valposs[valChoix];
                 return 1;
             }
         }
 
         else {
-            System.out
-                    .println("Je n'arrive pas à trouver la bonne réponse. Pourriez-vous combler le trou dans la ligne "
-                            + tab[0] + " et la colonne " + tab[1] + " pour moi s'il-te-plait?");
+            System.out.println("Je n'arrive pas à trouver la bonne réponse. Pourriez-vous combler le trou dans la ligne " + tab[0] + " et la colonne " + tab[1] + " pour moi s'il-te-plait?");
             answ = input.nextInt();
             gOrdi[tab[0]][tab[1]] = answ;
             return 1;

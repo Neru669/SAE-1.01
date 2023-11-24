@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Joker",
+      "request": "launch",
+      "mainClass": "Joker",
+      "projectName": "Sudoku_aba7dace"
+    },
+    {
+      "type": "java",
       "name": "SudokuBase",
       "request": "launch",
       "mainClass": "SudokuBase",

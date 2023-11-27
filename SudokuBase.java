@@ -558,6 +558,20 @@ public class SudokuBase {
 
     } // fin suppValPoss
 
+    //Supprime de valpossibles toutes les valeurs poss (car n'est plus un trou) et mets nbvalposs à 0.
+    //en soi inutile mais meilleur visualisation lors des tests
+    public static void updateCaseRempli(int[][] gOrdi, int i, int j, boolean[][][] valPossibles, int[][] nbValPoss) {
+        //verifie bien que gordi n'est PLUS un trou
+        if (gOrdi[i][j] != 0) {
+            for (int k = 1; k < valPossibles[i][j].length; k++) {
+                boolean check = supprime(valPossibles[i][j], k);
+                if (check) {
+                    nbValPoss[i][j] = nbValPoss[i][j] - 1;
+                }   
+            }
+        }
+    }
+
     public static int racineParfaite(int n) {
         int tmp;
         int d = n / 2;
@@ -781,6 +795,7 @@ public class SudokuBase {
                 }
                 gOrdi[tab[0]][tab[1]] = k;
                 suppValPoss(gOrdi, tab[0], tab[1], valPossibles, nbValPoss); //Actualiser la table apres remplissage
+                updateCaseRempli(gOrdi, tab[0], tab[1], valPossibles, nbValPoss); //actualiser case nest plus un trou
                 afficheGrille(3, gOrdi);
                 afficheGrille(3, nbValPoss);
                 return 0;
@@ -790,6 +805,7 @@ public class SudokuBase {
                 ans = input.nextInt();
                 gOrdi[tab[0]][tab[1]] = ans;
                 suppValPoss(gOrdi, tab[0], tab[1], valPossibles, nbValPoss); //actualiser la table apres remplissage
+                updateCaseRempli(gOrdi, tab[0], tab[1], valPossibles, nbValPoss);
                 return 1;
             
             }

@@ -558,6 +558,19 @@ public class Joker {
 
     } // fin suppValPoss
 
+
+    public static void updateCaseRempli(int[][] gOrdi, int i, int j, boolean[][][] valPossibles, int[][] nbValPoss) {
+        //verifie bien que gordi n'est PLUS un trou
+        if (gOrdi[i][j] != 0) {
+            for (int k = 1; k < valPossibles[i][j].length; k++) {
+                boolean check = supprime(valPossibles[i][j], k);
+                if (check) {
+                    nbValPoss[i][j] = nbValPoss[i][j] - 1;
+                }   
+            }
+        }
+    }
+
     public static int racineParfaite(int n) {
         int tmp;
         int d = n / 2;
@@ -787,6 +800,7 @@ public class Joker {
             gOrdi[tab[0]][tab[1]] = k;
             // RETIRERE CE QUI A ETE AJOUTE EYEYE
             suppValPoss(gOrdi, tab[0], tab[1], valPossibles, nbValPoss);
+            updateCaseRempli(gOrdi, tab[0], tab[1], valPossibles, nbValPoss);
             return 0;
         }
 
@@ -825,11 +839,13 @@ public class Joker {
             if (verifyStringFromTabString(ans, possibleAnsYes)) {
                 gOrdi[tab[0]][tab[1]] = valposs[valChoix];
                 suppValPoss(gOrdi, tab[0], tab[1], valPossibles, nbValPoss);
+                updateCaseRempli(gOrdi, tab[0], tab[1], valPossibles, nbValPoss);
                 return 0;
             } else {
                 valChoix = (valChoix - 1) * (-1);
                 gOrdi[tab[0]][tab[1]] = valposs[valChoix];
                 suppValPoss(gOrdi, tab[0], tab[1], valPossibles, nbValPoss);
+                updateCaseRempli(gOrdi, tab[0], tab[1], valPossibles, nbValPoss);
                 return 1;
             }
         }
@@ -839,6 +855,7 @@ public class Joker {
             answ = input.nextInt();
             gOrdi[tab[0]][tab[1]] = answ;
             suppValPoss(gOrdi, tab[0], tab[1], valPossibles, nbValPoss);
+            updateCaseRempli(gOrdi, tab[0], tab[1], valPossibles, nbValPoss);
             return 1;
         }
 

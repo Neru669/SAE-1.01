@@ -768,19 +768,26 @@ public class SudokuBase {
         ///étape 1: vérifier si trou évident, si oui le remplir. Si pls trous évidents choisir le premier. Sinon ordi prend un joker. L'humain saisi la bonne valeur du premier trou. Si humain rentre mauvaise valeur humain le dit et
         int [] tab = chercheTrou(gOrdi, nbValPoss);
 
+            // afficheGrille(3, gOrdi);
+            // afficheGrille(3, nbValPoss);
             int k = 0, ans;
             if (nbValPoss[tab[0]][tab[1]] == 1){ ///evident
                 while (k<valPossibles[tab[0]][tab[1]].length && valPossibles[tab[0]][tab[1]][k]!=true){
                     k = k + 1;
                 }
                 gOrdi[tab[0]][tab[1]] = k;
+                suppValPoss(gOrdi, tab[0], tab[1], valPossibles, nbValPoss); //Actualiser la table apres remplissage
+                // afficheGrille(3, gOrdi);
+                // afficheGrille(3, nbValPoss);
                 return 0;
             }
             else {
                 System.out.println("Je n'arrive pas à trouver la bonne réponse. Pourriez-vous combler le trou dans la ligne " + tab[0] + " et la colonne " + tab[1] + " pour moi s'il-te-plait?");
                 ans = input.nextInt();
                 gOrdi[tab[0]][tab[1]] = ans;
+                suppValPoss(gOrdi, tab[0], tab[1], valPossibles, nbValPoss); //actualiser la table apres remplissage
                 return 1;
+            
             }
         
     

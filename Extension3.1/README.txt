@@ -5,3 +5,7 @@ Fonction  modifiée par rapport à base :
     
 
     // absoolumment verifeir que on retire de nbvalpos et nbval quand on remplit....
+
+
+
+    demander la verif de l'utilisateur pour les trous aleas (update: toutes les propositions) meme si & seul choix restant...

@@ -518,10 +518,10 @@ public class Joker {
 
         // LIGNES
         for (int l = 0; l < gOrdi.length; l++) {
-            if (gOrdi[i][l] > 0) {
-                boolean check = supprime(valPossibles[i][j], gOrdi[i][l]);
+            if (gOrdi[i][l] == 0) {
+                boolean check = supprime(valPossibles[i][l], gOrdi[i][j]);
                 if (check) {
-                    nbValPoss[i][j] = nbValPoss[i][j] - 1;
+                    nbValPoss[i][l] = nbValPoss[i][l] - 1;
                 }
             }
 
@@ -529,10 +529,10 @@ public class Joker {
 
         // COLONNES
         for (int k = 0; k < gOrdi.length; k++) {
-            if (gOrdi[k][j] > 0) {
-                boolean check = supprime(valPossibles[i][j], gOrdi[k][j]);
+            if (gOrdi[k][j] == 0) {
+                boolean check = supprime(valPossibles[k][j], gOrdi[i][j]);
                 if (check) {
-                    nbValPoss[i][j] = nbValPoss[i][j] - 1;
+                    nbValPoss[k][j] = nbValPoss[k][j] - 1;
                 }
             }
         }
@@ -545,14 +545,16 @@ public class Joker {
 
         for (int ligne = xDebCarre; ligne < xDebCarre + k; ligne++) {
             for (int colonne = yDebCarre; colonne < yDebCarre + k; colonne++) {
-                if (gOrdi[ligne][colonne] > 0) {
-                    boolean check = supprime(valPossibles[i][j], gOrdi[ligne][colonne]);
+                if (gOrdi[ligne][colonne] == 0) {
+                    boolean check = supprime(valPossibles[ligne][colonne], gOrdi[i][j]);
                     if (check) {
-                        nbValPoss[i][j] = nbValPoss[i][j] - 1;
+                        nbValPoss[ligne][colonne] = nbValPoss[ligne][colonne] - 1;
                     }
                 }
             }
         }
+
+  
 
     } // fin suppValPoss
 
@@ -784,8 +786,7 @@ public class Joker {
             }
             gOrdi[tab[0]][tab[1]] = k;
             // RETIRERE CE QUI A ETE AJOUTE EYEYE
-            valPossibles[tab[0]][tab[1]][k] = false;
-            nbValPoss[tab[0]][tab[1]] = 0;
+            suppValPoss(gOrdi, tab[0], tab[1], valPossibles, nbValPoss);
             return 0;
         }
 
@@ -797,8 +798,7 @@ public class Joker {
                 if (valPossibles[tab[0]][tab[1]][k] == true) {
                     valposs[count] = k;
                     // RETIRERE CE QUI A ETE AJOUTE EYEYE
-                    valPossibles[tab[0]][tab[1]][k] = false;
-                    nbValPoss[tab[0]][tab[1]]--;
+
                     count = count + 1;
                 }
                 k = k + 1;
@@ -824,11 +824,12 @@ public class Joker {
 
             if (verifyStringFromTabString(ans, possibleAnsYes)) {
                 gOrdi[tab[0]][tab[1]] = valposs[valChoix];
-
+                suppValPoss(gOrdi, tab[0], tab[1], valPossibles, nbValPoss);
                 return 0;
             } else {
                 valChoix = (valChoix - 1) * (-1);
                 gOrdi[tab[0]][tab[1]] = valposs[valChoix];
+                suppValPoss(gOrdi, tab[0], tab[1], valPossibles, nbValPoss);
                 return 1;
             }
         }
@@ -837,6 +838,7 @@ public class Joker {
             System.out.println("Je n'arrive pas à trouver la bonne réponse. Pourriez-vous combler le trou dans la ligne " + tab[0] + " et la colonne " + tab[1] + " pour moi s'il-te-plait?");
             answ = input.nextInt();
             gOrdi[tab[0]][tab[1]] = answ;
+            suppValPoss(gOrdi, tab[0], tab[1], valPossibles, nbValPoss);
             return 1;
         }
 

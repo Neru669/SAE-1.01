@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class SudokuBase {
+public class Triche {
 
     // .........................................................................
     // Fonctions utiles
@@ -382,7 +382,7 @@ public class SudokuBase {
      */
     public static int[][] genereGrilleIncomplete(int nbTrous, int[][] gSecret) {
         // ___________________________________________________________________________
-    
+
         Random r = new Random();
         for (int k = 0; k < nbTrous; k++) {
             // METHODE AVEC TAB DE COORDS
@@ -425,6 +425,7 @@ public class SudokuBase {
 
     public static void saisirGrilleIncomplete(int nbTrous, int[][] grille) {
         // _________________________________________________
+        int saisie;
         int k = 3;
         int nbTrousCount = 0;
         while (nbTrousCount != nbTrous) {
@@ -432,14 +433,25 @@ public class SudokuBase {
             afficheGrille(k, grille);
             for (int i = 0; i < grille.length; i++) {
                 for (int j = 0; j < grille.length; j++) {
-                    System.out.println("Veuillez remplir la grille ci-dessus (saisir 0 pour un Trou), vous pouvez remplir plusieurs cases en séparant la saisie par un ou des espaces, le remplissage se fait de gauche à droite puis de haut en bas. \nVous êtes aux coordonées ("+ (i + 1) + ", " + (j + 1) + ") : ");
+                    System.out.println(
+                            "Veuillez remplir la grille ci-dessus (saisir 0 pour un Trou), vous pouvez remplir plusieurs cases en séparant la saisie par un ou des espaces, le remplissage se fait de gauche à droite puis de haut en bas. \nVous êtes aux coordonées ("
+                                    + (i + 1) + ", " + (j + 1) + ") : ");
                     System.out.println("Nombre de Trous requis : " + nbTrous);
                     System.out.println("Nombre de Trous saisis : " + nbTrousCount);
                     if (nbTrousCount < nbTrous) {
-                        grille[i][j] = saisirEntierMinMax(0, 9);
-                    } else {
+                        saisie = saisirEntierMinMax(0, 9);
+                        while (saisie!= 0 && (!verifierLignes(saisie, i, grille) || !verifierColonnes(saisie, j, grille) || !verifierCarre(saisie, i, j, grille))){
+                            saisie = saisirEntierMinMax(0, 9);
+                        }
+                        grille[i][j] = saisie;
+                    }
+                    else {
                         System.out.println("Vous ne pouvez plus saisir de trous!");
-                        grille[i][j] = saisirEntierMinMax(1, 9);
+                        saisie = saisirEntierMinMax(1, 9);
+                        while (!verifierLignes(saisie, i, grille) || !verifierColonnes(saisie, j, grille) || !verifierCarre(saisie, i, j, grille)){
+                            saisie = saisirEntierMinMax(1, 9);
+                        }
+                        grille[i][j] = saisie;
                     }
                     // System.out.print("\033[H\033[2J"); //move console slo thats whats above is
                     // not shown
@@ -454,7 +466,41 @@ public class SudokuBase {
         input.close();
     } // fin saisirGrilleIncomplete
 
-   
+    // FAIRE FONCTION VERIFIER LIGNES/colonnes/CARRES
+
+    public static boolean verifierLignes(int input, int i, int[][] grille){
+        for (int k = 0; k < grille.length; k++) {
+            if (grille[i][k] == input){
+               return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean verifierColonnes(int input, int j, int[][] grille) {
+        for (int k = 0; k < grille.length; k++) {
+            if (grille[k][j] == input) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean verifierCarre(int input, int i, int j, int[][] grille) {
+        int k = racineParfaite(grille.length);
+        int xDebCarre, yDebCarre;
+        xDebCarre = debCarre(k, i, j)[0];
+        yDebCarre = debCarre(k, i, j)[1];
+
+        for (int ligne = xDebCarre; ligne < xDebCarre + k; ligne++) {
+            for (int colonne = yDebCarre; colonne < yDebCarre + k; colonne++) {
+                if (grille[ligne][colonne] == input) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
     // .........................................................................
 
@@ -558,6 +604,7 @@ public class SudokuBase {
 
     } // fin suppValPoss
 
+
     public static int racineParfaite(int n) {
         int tmp;
         int d = n / 2;
@@ -583,9 +630,7 @@ public class SudokuBase {
         initPleines(gOrdi, valPossibles, nbValPoss);
         for (int i = 0; i < gOrdi.length; i++) {
             for (int j = 0; j < gOrdi.length; j++) {
-                if (gOrdi[i][j] != 0) {
-                    suppValPoss(gOrdi, i, j, valPossibles, nbValPoss);
-                }
+                suppValPoss(gOrdi, i, j, valPossibles, nbValPoss);
             }
         }
     } // fin initPossibles
@@ -616,8 +661,8 @@ public class SudokuBase {
         }
         initGrilleComplete(gSecret);
         initGrilleIncomplete(nb, gSecret, gHumain);
-        // saisirGrilleIncomplete(nb, gOrdi); //vrai
-        initGrilleIncomplete(nb, gSecret, gOrdi); //test ====================================================
+        saisirGrilleIncomplete(nb, gOrdi); //vrai
+        // initGrilleIncomplete(nb, gSecret, gOrdi); // test ====================================================
         initPossibles(gOrdi, valPossibles, nbValPoss);
 
         return nb;
@@ -642,20 +687,19 @@ public class SudokuBase {
         // Demander à l'entité humaine de choisir un trou (coord)
         // Verifier quil sagit bien dun trou, sinon repeter le demande (while)
         // Demander si il veut utiliser un jojojoker
-            // Si OUI remplir le trou avec bonne val et +1 pen
-            // SINON
-        //      Remplir le trou avec une valeur de 1 à 9 saisit
-        //      Si valeur FAUSSE, point de pénalité = + 1
-                // et recommencer depuis joker
-        // 
+        // Si OUI remplir le trou avec bonne val et +1 pen
+        // SINON
+        // Remplir le trou avec une valeur de 1 à 9 saisit
+        // Si valeur FAUSSE, point de pénalité = + 1
+        // et recommencer depuis joker
+        //
         // ___________________________________________________________________
         int pen = 0;
         boolean boolTrou = false;
 
-        String [] possibleAnsYes = {"Y", "y", "yes", "Yes", "YES"};
-        String [] possibleAnsNo = {"N", "n", "no", "No", "NO"};
-        
-       
+        String[] possibleAnsYes = { "Y", "y", "yes", "Yes", "YES" };
+        String[] possibleAnsNo = { "N", "n", "no", "No", "NO" };
+
         while (!boolTrou) {
             afficheGrille(3, gHumain);
             System.out.println("Veuillez choisir les coordonnées d'un trou à remplir (lignes, colonnes) : ");
@@ -665,36 +709,35 @@ public class SudokuBase {
             int j = input.nextInt() - 1;
 
             while (gHumain[i][j] != 0) {
-                System.out.println("Veuillez choisir les coordonnées d'un trou remplissable à remplir (lignes, colonnes) : ");
+                System.out.println(
+                        "Veuillez choisir les coordonnées d'un trou remplissable à remplir (lignes, colonnes) : ");
                 System.out.print("i = ");
                 i = input.nextInt() - 1;
                 System.out.print("j = ");
-                j = input.nextInt() - 1;  
+                j = input.nextInt() - 1;
             }
 
             System.out.println("Voulez-vous un joker ? Fais ton chois et rentre Y/N ou yes/no");
 
             String ans = input.nextLine();
 
-            while (!verifyStringFromTabString(ans, possibleAnsYes) && 
+            while (!verifyStringFromTabString(ans, possibleAnsYes) &&
                     !verifyStringFromTabString(ans, possibleAnsNo)) {
                 ans = input.nextLine();
-                System.out.println(ans);
+                // System.out.println(ans);
             }
 
             if (verifyStringFromTabString(ans, possibleAnsYes)) {
-                    pen = pen + 1; //penalité
-                    gHumain[i][j] = gSecret[i][j];
-                    boolTrou = true;
-            }
-            else {
+                pen = pen + 1; // penalité
+                gHumain[i][j] = gSecret[i][j];
+                boolTrou = true;
+            } else {
                 System.out.println("Choisissez le nombre pour remplir cette case :");
                 int ansTrou = saisirEntierMinMax(1, gSecret.length);
-                if (ansTrou != gSecret[i][j]){
+                if (ansTrou != gSecret[i][j]) {
                     pen = pen + 1;
                     System.out.println("Dommage, réessaie");
-                }
-                else {
+                } else {
                     gHumain[i][j] = gSecret[i][j];
                     boolTrou = true;
                 }
@@ -735,28 +778,35 @@ public class SudokuBase {
      */
     public static int[] chercheTrou(int[][] gOrdi, int[][] nbValPoss) {
         // ___________________________________________________________________
-        int k=0;
-        int [] tab = {-1, -1};
-
+        int k = 0, m = 0;
+        int[] tab = { -1, -1 };
 
         for (int i = 0; i < gOrdi.length; i++) {
             for (int j = 0; j < gOrdi[i].length; j++) {
-                if (gOrdi[i][j]==0 && k==0) {
+
+                if (nbValPoss[i][j] == 2 && m == 0) {
+                    tab[0] = i;
+                    tab[1] = j;
+                    k = 1;
+                    m = 1;
+                }
+
+                if (gOrdi[i][j] == 0 && k == 0) {
                     tab[0] = i;
                     tab[1] = j;
                     k = 1;
                 }
-        
-                if (nbValPoss[i][j]==1) {
+
+                if (nbValPoss[i][j] == 1) {
                     tab[0] = i;
                     tab[1] = j;
                     return tab;
                 }
             }
         }
-        
+
         return tab;
-        
+
     } // fin chercheTrou
 
     // .........................................................................
@@ -769,35 +819,85 @@ public class SudokuBase {
      */
     public static int tourOrdinateur(int[][] gOrdi, boolean[][][] valPossibles, int[][] nbValPoss) {
         // ________________________________________________________________________________________________
-        ///étape 1: vérifier si trou évident, si oui le remplir. Si pls trous évidents choisir le premier. Sinon ordi prend un joker. L'humain saisi la bonne valeur du premier trou. Si humain rentre mauvaise valeur humain le dit et
-        int [] tab = chercheTrou(gOrdi, nbValPoss);
+        /// étape 1: vérifier si trou évident, si oui le remplir. Si pls trous évidents
+        // choisir le premier. Sinon ordi prend un joker. L'humain saisi la bonne valeur
+        // du premier trou. Si humain rentre mauvaise valeur humain le dit et
+        int[] tab = chercheTrou(gOrdi, nbValPoss);
+        afficheGrille(3, nbValPoss);
 
-            afficheGrille(3, gOrdi);
-            afficheGrille(3, nbValPoss);
-            int k = 0, ans;
-            if (nbValPoss[tab[0]][tab[1]] == 1){ ///evident
-                while (k<valPossibles[tab[0]][tab[1]].length && valPossibles[tab[0]][tab[1]][k]!=true){
-                    k = k + 1;
+        int k = 0, answ;
+
+        if (nbValPoss[tab[0]][tab[1]] == 0) {
+            System.out.println("Tricheur");
+            return -1; //Fin de partie
+        }
+
+        else if (nbValPoss[tab[0]][tab[1]] == 1) { /// evident
+            while (k < valPossibles[tab[0]][tab[1]].length && valPossibles[tab[0]][tab[1]][k] != true) {
+                k = k + 1;
+            }
+            gOrdi[tab[0]][tab[1]] = k;
+            // RETIRERE CE QUI A ETE AJOUTE EYEYE
+            suppValPoss(gOrdi, tab[0], tab[1], valPossibles, nbValPoss);
+            return 0;
+        }
+
+        else if (nbValPoss[tab[0]][tab[1]] == 2) {
+            int count = 0;
+            int valposs[] = new int[2];
+            while (k < valPossibles[tab[0]][tab[1]].length && count < 2) {
+                // STOCKER LES DEUX VAL
+                if (valPossibles[tab[0]][tab[1]][k] == true) {
+                    valposs[count] = k;
+                    // RETIRERE CE QUI A ETE AJOUTE EYEYE
+
+                    count = count + 1;
                 }
-                gOrdi[tab[0]][tab[1]] = k;
-                suppValPoss(gOrdi, tab[0], tab[1], valPossibles, nbValPoss); //Actualiser la table apres remplissage
-                afficheGrille(3, gOrdi);
-                afficheGrille(3, nbValPoss);
+                k = k + 1;
+            }
+            // CHOISIR UNE DES DEUX VAL
+            Random r = new Random();
+            int valChoix = r.nextInt(2);
+
+            // VERIFIER SI JUSTE
+            System.out.println("Ordi entre " + valposs[valChoix] + " aux coordonées (" + (tab[0]+1) + ", " + (tab[1]+1) + ").");
+
+            System.out.println("Est-ce juste ? (Yes/No ou Y/N) : ");
+
+            String[] possibleAnsYes = { "Y", "y", "yes", "Yes", "YES" };
+            String[] possibleAnsNo = { "N", "n", "no", "No", "NO" };
+
+            String ans = input.nextLine();
+
+            while (!verifyStringFromTabString(ans, possibleAnsYes) && !verifyStringFromTabString(ans, possibleAnsNo)) {
+                ans = input.nextLine();
+                // System.out.println(ans);
+            }
+
+            if (verifyStringFromTabString(ans, possibleAnsYes)) {
+                gOrdi[tab[0]][tab[1]] = valposs[valChoix];
+                suppValPoss(gOrdi, tab[0], tab[1], valPossibles, nbValPoss);
                 return 0;
-            }
-            else {
-                System.out.println("Je n'arrive pas à trouver la bonne réponse. Pourriez-vous combler le trou dans la ligne " + tab[0] + " et la colonne " + tab[1] + " pour moi s'il-te-plait?");
-                ans = input.nextInt();
-                gOrdi[tab[0]][tab[1]] = ans;
-                suppValPoss(gOrdi, tab[0], tab[1], valPossibles, nbValPoss); //actualiser la table apres remplissage
+            } else {
+                valChoix = (valChoix - 1) * (-1);
+                gOrdi[tab[0]][tab[1]] = valposs[valChoix];
+                suppValPoss(gOrdi, tab[0], tab[1], valPossibles, nbValPoss);
                 return 1;
-            
             }
-        
-    
+        }
+
+        else {
+            System.out.println("Je n'arrive pas à trouver la bonne réponse. Pourriez-vous combler le trou dans la ligne " + tab[0] + " et la colonne " + tab[1] + " pour moi s'il-te-plait?");
+            answ = input.nextInt();
+            if (!valPossibles[tab[0]][tab[1]][answ]) { // VERIFIER TRICHE
+                return -1;
+            }
+            gOrdi[tab[0]][tab[1]] = answ;
+            suppValPoss(gOrdi, tab[0], tab[1], valPossibles, nbValPoss);
+            return 1;
+        }
+
     } // fin tourOrdinateur
-
-
 
     // .........................................................................
 
@@ -811,35 +911,34 @@ public class SudokuBase {
      * sinon
      */
     public static int partie() {
-        
+
         int[][] gSecret = new int[9][9];
         int[][] gHumain = new int[9][9];
-        int [][] gOrdi = new int [9][9];
-        int [][] nbValPoss = new int[9][9];
-        boolean [][][] valPossibles = new boolean[9][9][10];
+        int[][] gOrdi = new int[9][9];
+        int[][] nbValPoss = new int[9][9];
+        boolean[][][] valPossibles = new boolean[9][9][10];
         int penHum = 0, penOrdi = 0;
         int nbTrou = initPartie(gSecret, gHumain, gOrdi, valPossibles, nbValPoss);
 
-        for (int i = 0; i<nbTrou;i++){
-           penHum = penHum + tourHumain(gSecret, gHumain);
-           penOrdi = penOrdi + tourOrdinateur(gOrdi, valPossibles, nbValPoss);
+        for (int i = 0; i < nbTrou; i++) {
+            penHum = penHum + tourHumain(gSecret, gHumain);
+
+            int check = tourOrdinateur(gOrdi, valPossibles, nbValPoss);
+            if (check == -1) {
+                return 2;
+            }
+            penOrdi = penOrdi + check;
         }
-        if (penHum == penOrdi) { //matchnul
+        if (penHum == penOrdi) { // matchnul
             return 0;
-        }
-        else if (penHum<penOrdi){ //homme gagne
+        } else if (penHum < penOrdi) { // homme gagne
             return 1;
-        }
-        else { 
+        } else {
             return 2;
         }
 
-        
-        
-        
-        
         // _____________________________
-        
+
     } // fin partie
 
     // .........................................................................

@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Triche",
+      "request": "launch",
+      "mainClass": "Triche",
+      "projectName": "Sudoku_9f803d3b"
+    },
+    {
+      "type": "java",
       "name": "Joker",
       "request": "launch",
       "mainClass": "Joker",

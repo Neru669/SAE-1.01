@@ -9,3 +9,9 @@ partie
 verifierLignes
 verifierColonnes
 verifierCarre
+
+attention demander meme si 1/2 valeurs possibles ???
+
+
+
+

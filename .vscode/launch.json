@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Brouillon",
+      "request": "launch",
+      "mainClass": "Brouillon",
+      "projectName": "Sudoku_9f803d3b"
+    },
+    {
+      "type": "java",
       "name": "OptiTrou",
       "request": "launch",
       "mainClass": "OptiTrou",

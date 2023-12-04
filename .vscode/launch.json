@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "IncompleteFacile",
+      "request": "launch",
+      "mainClass": "IncompleteFacile",
+      "projectName": "Sudoku_9f803d3b"
+    },
+    {
+      "type": "java",
       "name": "Brouillon",
       "request": "launch",
       "mainClass": "Brouillon",

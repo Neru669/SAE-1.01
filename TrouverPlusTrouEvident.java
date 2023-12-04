@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class IncompleteFacile {
+public class TrouverPlusTrouEvident {
 
     // .........................................................................
     // Fonctions utiles
@@ -307,7 +307,7 @@ public class IncompleteFacile {
         };
 
         copieMatrice(g, gComplete);
-        // flipFlopGrille(gComplete);
+        flipFlopGrille(gComplete);
 
 
     } // fin initGrilleComplete
@@ -422,8 +422,8 @@ public class IncompleteFacile {
 
         for (int i=0;i<gIncomplete.length;i++){
             for (int j=0;j<gIncomplete.length;j++){
-                if (verifierLignes(0, i, j, gIncomplete)
-                    && verifierColonnes(0, i, j, gIncomplete) 
+                if (verifierLignes(0, i, gIncomplete)
+                    && verifierColonnes(0, j, gIncomplete) 
                     && verifierCarre(0, i, j, gIncomplete)){
                     compteur = compteur + 1;
                     gIncomplete[i][j] = 0;
@@ -436,153 +436,22 @@ public class IncompleteFacile {
         return compteur; // nombre de trou
     }
 
+    
 
+    // FAIRE FONCTION VERIFIER LIGNES/colonnes/CARRES
 
-    public static int initGrilleIncompleteFacileBis(int[][] gSecret, int[][] gIncomplete, 
-    boolean[][][] valPossibles, int[][] nbValPoss) {
-
-        int nbTrou = 0;
-        copieMatrice(gSecret, gIncomplete);
-        // for (int i = 0; i < gIncomplete.length; i++) {
-        //     for (int j = 0; j < gIncomplete.length; j++) {
-        //          if (gIncomplete[i][j] != 0) { // Verifier si rempli
-        //             int val = gIncomplete[i][j];
-        //             gIncomplete[i][j] = 0; //faire comme si ceatit un trou
-        //             initPossibles(gIncomplete, valPossibles, nbValPoss); //regarder nbvalposs de grille 
-        //             if (nbValPoss[i][j] == 1 //verifier que si devient trou, bien un trou evident
-        //                 && verifierLignesValUnique(1, i, j, nbValPoss) //verifier que les autres trous restent evidents
-        //                 && verifierColonnesValUnique(1, i, j, nbValPoss) 
-        //                 && verifierCarreValUnique(1, i, j, nbValPoss)) {
-
-        //                 nbTrou = nbTrou + 1; //compteur de trou
-        //             }
-        //             else {
-        //                 gIncomplete[i][j] = val; //sinon remettre la valeur
-        //             }
-                                     
-        //          }
-        //     }       
-        // }
-
-        boolean aParcouruToutGrille = false;
-        boolean aTrouverCasePourTrouEvident;
-        int i, j;
-        
-        while (!aParcouruToutGrille) {
-            i = 0; j = 0; aTrouverCasePourTrouEvident = false;
-            while (!aTrouverCasePourTrouEvident && !aParcouruToutGrille) {
-                // VERIFIER qu'une case remplie peut bien etre transformé en un trou évident
-                // si oui devient un trou evident, sinon reste la meme
-                if (gIncomplete[i][j] != 0) { // Verifier si rempli
-                    int val = gIncomplete[i][j];
-                    gIncomplete[i][j] = 0; //faire comme si ceatit un trou
-                    initPossibles(gIncomplete, valPossibles, nbValPoss); //regarder nbvalposs de grille 
-                    if (nbValPoss[i][j] == 1 //verifier que si devient trou, bien un trou evident
-                        && verifierLignesValUnique(1, i, j, nbValPoss) //verifier que les autres trous restent evidents
-                        && verifierColonnesValUnique(1, i, j, nbValPoss) 
-                        && verifierCarreValUnique(1, i, j, nbValPoss)) {
-
-                        nbTrou = nbTrou + 1; //compteur de trou
-                        aTrouverCasePourTrouEvident = true;
-                    }
-                    else {
-                        gIncomplete[i][j] = val; //sinon remettre la valeur
-                    }              
-                }
-
-                // incrementer ssi n'a pas trouver case pour trou evident
-                if (!aTrouverCasePourTrouEvident) {
-                    if (j == gIncomplete.length - 1) {
-                        j = 0;
-                        i = i + 1;
-                    }
-                    else {
-                        j = j + 1;
-                    }
-                    // condition d'arret lorsque toute la grille est parcouru i > 8.
-                    if (i == 9) {
-                        aParcouruToutGrille = true;
-                    }                       
-                }
-            }
-        flipFlopGrille(gIncomplete); //transformer la grille apres chaque trou evident crée 
-        }
-
-        // initPossibles(gIncomplete, valPossibles, nbValPoss);
-        // afficheGrille(3, gIncomplete);
-        // afficheGrille(3, nbValPoss);
-        // System.out.println(nbTrou);
- 
-        return nbTrou;
-    }
-
-
-
-
-
-    // pour verifer que lignes/colonnes/carres non nuls ont tous une même valeur.
-
-    public static boolean verifierLignesValUnique(int input, int i, int j, int[][] grille){
+    public static boolean verifierLignes(int input, int i, int[][] grille){
         for (int k = 0; k < grille.length; k++) {
-            if (k != j && grille[i][k] != 0 && grille[i][k] != input){
+            if (grille[i][k] == input){
                return false;
             }
         }
         return true;
     }
 
-    public static boolean verifierColonnesValUnique(int input, int i, int j, int[][] grille) {
+    public static boolean verifierColonnes(int input, int j, int[][] grille) {
         for (int k = 0; k < grille.length; k++) {
-            if (k != i && grille[k][j] != 0 && grille[k][j] != input) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public static boolean verifierCarreValUnique(int input, int i, int j, int[][] grille) {
-        int k = racineParfaite(grille.length);
-        int xDebCarre, yDebCarre;
-        xDebCarre = debCarre(k, i, j)[0];
-        yDebCarre = debCarre(k, i, j)[1];
-
-        for (int ligne = xDebCarre; ligne < xDebCarre + k; ligne++) {
-            for (int colonne = yDebCarre; colonne < yDebCarre + k; colonne++) {
-                if (!(ligne == i && colonne == j) && grille[ligne][colonne] != 0 
-                    && grille[ligne][colonne] != input) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // FAIRE FONCTION VERIFIER LIGNES/colonnes/CARRES pour verfier les doublons
-
-    public static boolean verifierLignes(int input, int i, int j, int[][] grille){
-        for (int k = 0; k < grille.length; k++) {
-            if (k != j && grille[i][k] == input){
-               return false;
-            }
-        }
-        return true;
-    }
-
-    public static boolean verifierColonnes(int input, int i, int j, int[][] grille) {
-        for (int k = 0; k < grille.length; k++) {
-            if (k != i && grille[k][j] == input) {
+            if (grille[k][j] == input) {
                 return false;
             }
         }
@@ -597,8 +466,7 @@ public class IncompleteFacile {
 
         for (int ligne = xDebCarre; ligne < xDebCarre + k; ligne++) {
             for (int colonne = yDebCarre; colonne < yDebCarre + k; colonne++) {
-                if (!(ligne == i && colonne == j) 
-                    && grille[ligne][colonne] == input) {
+                if (grille[ligne][colonne] == input) {
                     return false;
                 }
             }
@@ -860,11 +728,13 @@ public class IncompleteFacile {
     public static int initPartie(int[][] gSecret, int[][] gHumain, int[][] gOrdi, boolean[][][] valPossibles,
             int[][] nbValPoss, int[][] tabTrouEvident) {
         // ______________________________________________________________________________________________
-
+        int nb = 82;
+        while (nb < 0 || nb > 81) {
+            System.out.println("Entre un nombre entre 0 et 81. Il s'agit du nombre de trous à compléter.");
+            nb = input.nextInt();
+        }
         initGrilleComplete(gSecret);
-        // initGrilleIncompleteFacile(gSecret, gHumain);
-        int nb = initGrilleIncompleteFacileBis(gSecret, gHumain, valPossibles, nbValPoss);
-        System.out.println("La partie comporte " + nb + " trous :");
+        initGrilleIncompleteFacile(gSecret, gHumain);
         // saisirGrilleIncomplete(nb, gOrdi); //vrai
         initGrilleIncomplete(nb, gSecret, gOrdi); // test ====================================================
         initPossibles(gOrdi, valPossibles, nbValPoss);
@@ -1025,12 +895,7 @@ public class IncompleteFacile {
         }
 
     }
-    // la valuer -1 a nbvalpossible est associe au trou evident deja dans la pile, pour eviter
-    // le rajout de celle ci dans la pile lors de la synchro.
-    //synchroniser les trous evidents lors d'un
-    //remplissage du trou evident i-j, 
-    //pour que ceux qui le devienne evident et qui ne sont pas deja dans
-    //la pile soit ajouté dedans.
+
     public static void synchroTrouEvident(int[][] gOrdi, int[][] nbValPoss, int i, int j, int[][] tabTrouEvident,
             boolean checkTrouEvident) {
 

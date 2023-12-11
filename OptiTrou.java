@@ -159,6 +159,16 @@ public class OptiTrou {
         return anothertab;
     }
 
+    public static int uneValeurBis (boolean[] ens) {
+
+        for (int i = 1; i < ens.length; i++) {
+            if (ens[i] == true) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     // .........................................................................
 
     /**
@@ -632,7 +642,9 @@ public class OptiTrou {
      * retour : la valeur de nbTrous
      */
     public static int initPartie(int[][] gSecret, int[][] gHumain, int[][] gOrdi, boolean[][][] valPossibles,
-            int[][] nbValPoss, int[][] tabTrouEvident) {
+            int[][] nbValPoss, int[][] tabTrouEvident, 
+            boolean[][][] colPossibles, int[][] nbColPoss,
+            boolean[][][] ligPossibles, int[][] nbLigPoss) {
         // ______________________________________________________________________________________________
         int nb = 82;
         while (nb < 0 || nb > 81) {
@@ -646,8 +658,14 @@ public class OptiTrou {
         initGrilleIncomplete(nb, gSecret, gOrdi); // test ====================================================
         initPossibles(gOrdi, valPossibles, nbValPoss);
 
+        // Extension3.6==================
+        initPossiblesColLig(gOrdi, valPossibles, colPossibles, nbColPoss, ligPossibles, nbLigPoss);
+        //===============================
 
-        initChercheTrouEvident(gOrdi, nbValPoss, tabTrouEvident);
+
+        initChercheTrouEvident(gOrdi, nbValPoss, tabTrouEvident, nbColPoss, colPossibles, nbLigPoss, ligPossibles, valPossibles);
+        afficheGrille(3, gOrdi);
+        afficheGrille(3, nbValPoss);
 
         return nb;
     } // fin initPartie
@@ -788,22 +806,46 @@ public class OptiTrou {
     } // fin chercheTrou
 
     
-    public static void initChercheTrouEvident(int[][] gOrdi, int [][] nbValPoss, int[][] tabTrouEvident){
-        
+    public static void initChercheTrouEvident(int[][] gOrdi, int [][] nbValPoss, int[][] tabTrouEvident, 
+                                                int[][] nbColPoss, boolean[][][] colPossibles,
+                                                int[][] nbLigPoss, boolean[][][] ligPossibles,
+                                                boolean [][][] valPossibles){
+
         int count = 0;
         tabTrouEvident[0][0] = count;
         for (int i = 0; i < gOrdi.length; i++) {
             for (int j = 0; j < gOrdi[i].length; j++) {
-                if (nbValPoss[i][j] == 1) {
+                if (nbValPoss[i][j] == 1 ) {
                     count = count + 1;
                     tabTrouEvident[0][0] = count;
                     tabTrouEvident[count][0] = i;
                     tabTrouEvident[count][1] = j;
                     nbValPoss[i][j] = -1;
+                    
                 }
             }
         }
-    
+
+        // afficheGrille(3, nbColPoss);
+        // for (int i = 0; i < gOrdi.length; i++) {
+        //     for (int val = 1; val < gOrdi[i].length + 1; val++) {
+        //         if (nbColPoss[i][val] == 1) {
+        //             count = count + 1;
+        //             int sol = -1;
+        //             for (int k = 0; k < 9; k++) {
+        //                 if (colPossibles[i][val][k]) {
+        //                     sol = k;
+        //                 }
+        //             }
+        //             tabTrouEvident[0][0] = count;
+        //             tabTrouEvident[count][0] = i;
+        //             tabTrouEvident[count][1] = sol;
+        //             nbValPoss[i][sol] = -1;
+                    
+        //         }
+        //     }
+        // }
+        // afficheGrille(3, nbValPoss); //WORKS
     }
 
 
@@ -980,9 +1022,19 @@ public class OptiTrou {
         int[][] gOrdi = new int[9][9];
         int[][] nbValPoss = new int[9][9];
         boolean[][][] valPossibles = new boolean[9][9][10];
+
+        //Extension 3.6 ================================================
+        boolean[][][] colPossibles = new boolean[9][10][9];
+        boolean[][][] ligPossibles = new boolean[9][10][9];
+        int [][] nbColPoss = new int[9][10];
+        int [][] nbLigPoss = new int[9][10];
+        // =============================================================
+
+
         int [][] tabTrouEvident = new int[gOrdi.length*gOrdi.length][2];
         int penHum = 0, penOrdi = 0;
-        int nbTrou = initPartie(gSecret, gHumain, gOrdi, valPossibles, nbValPoss, tabTrouEvident);
+        int nbTrou = initPartie(gSecret, gHumain, gOrdi, valPossibles, nbValPoss, tabTrouEvident,
+                                colPossibles, nbColPoss, ligPossibles, nbLigPoss);
 
         afficherMat(tabTrouEvident); //test
   
@@ -1011,6 +1063,66 @@ public class OptiTrou {
 
     // .........................................................................
 
+    //==EXTENSION 3.6 ===============================================================
+
+
+
+    public static void initPossiblesColLig (int[][] gOrdi, boolean[][][] valPossibles,
+                        boolean[][][] colPossibles, int[][] nbColPoss,
+                        boolean[][][] ligPossibles, int[][] nbLigPoss) {
+
+        //verifier chaque trou de la ligne
+        //voir leur valeursPossibles
+        //verifier que si les colonnes contenant les trous contient cette valeur
+                        
+
+
+        // Pour une ligne i
+        for (int i = 0; i < gOrdi.length; i++) {
+            for (int val = 1; val < gOrdi.length + 1; val++) {
+                for (int j = 0; j < gOrdi.length; j++) {
+                    if (gOrdi[i][j] == 0 && valPossibles[i][j][val] == true) {
+                        colPossibles[i][val][j] = true;
+                        nbColPoss[i][val] = nbColPoss[i][val] + 1;
+                    }                
+                }
+            }
+        }
+
+        for (int j = 0; j < gOrdi.length; j++) {
+            for (int val = 1; val < gOrdi.length + 1; val++) {
+                for (int i = 0; i < gOrdi.length; i++) {
+                    if (gOrdi[i][j] == 0 && valPossibles[i][j][val] == true) {
+                        ligPossibles[j][val][i] = true;
+                        nbLigPoss[j][val] = nbLigPoss[j][val] + 1;
+                    }                
+                }
+            }
+        }
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // =====================================================================================
     /**
      * pré-requis : aucun
      * action : effectue une partie de Sudoku entre le joueur humain et l'ordinateur

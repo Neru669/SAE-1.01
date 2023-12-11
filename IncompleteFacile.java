@@ -508,9 +508,9 @@ public class IncompleteFacile {
         flipFlopGrille(gIncomplete); //transformer la grille apres chaque trou evident crée 
         }
 
-        // initPossibles(gIncomplete, valPossibles, nbValPoss);
-        // afficheGrille(3, gIncomplete);
-        // afficheGrille(3, nbValPoss);
+        initPossibles(gIncomplete, valPossibles, nbValPoss);
+        afficheGrille(3, gIncomplete);
+        afficheGrille(3, nbValPoss);
         // System.out.println(nbTrou);
  
         return nbTrou;

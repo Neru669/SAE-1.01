@@ -1,8 +1,10 @@
 // fonction modifié 
 
-
+initPartie 
 
 // fonction ajoutée
+
+initPossiblesColLig
 
 
 //notes
@@ -16,4 +18,9 @@ Pour une ligne verfier toutes les colonnes de chaque trou
 pour chaque valeurs possibles
 
 chaque case contient 
+
+
+
+FAIRE LE CARRE SI time
+
 

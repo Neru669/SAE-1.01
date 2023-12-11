@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
 public class SudokuBase {
@@ -412,6 +415,83 @@ public class SudokuBase {
 
     // .........................................................................
 
+
+
+
+//MODIFICI =================================================================================
+
+  //.........................................................................
+
+    /** MODIFICI
+     *  pré-requis : 0 <= nbTrous <= 81 ; g est une grille 9x9 (vide a priori) ; 
+     *               fic est un nom de fichier de ce répertoire contenant des valeurs de Sudoku
+     *  action :   remplit g avec les valeurs lues dans fic. Si la grille ne contient pas des valeurs 
+     *             entre 0 et 9 ou n'a pas exactement nbTrous valeurs nulles, la méthode doit signaler l'erreur,
+     *             et l'utilisateur doit corriger le fichier jusqu'à ce que ces conditions soient vérifiées.
+     *             On suppose dans la version de base que la grille saisie est bien une grille de Sudoku incomplète.
+     */
+    public static boolean saisirGrilleIncompleteFichier(int nbTrous, int [][] g, String fic){
+	//_________________________________________________
+
+	try (BufferedReader lecteur = new BufferedReader(new FileReader(fic))) {  
+        int countNbTrou = 0;
+	    for (int i = 0 ; i < 9 ; i++){
+            String ligne = lecteur.readLine();
+            String [] valeurs = ligne.split("\\s+");
+                for (int j = 0 ; j < 9 ; j++) {
+                    g[i][j] = Integer.parseInt(valeurs[j]);
+                    if (g[i][j] == 0) {
+                        countNbTrou = countNbTrou + 1;
+                    }
+                    if (g[i][j] < 0 || g[i][j] > 9) {
+                        g[i][j] = 0; //reset valeur pour eviter probleme dans initpartie, vu 
+                        // qu'on ne releve pas l'erreur mais on l'affiche juste
+                        System.out.println("La grille du fichier \'" 
+                        + fic + "\' contient des valeurs non autorisés.");
+                        return false;
+                        // j = 9; i = 9;
+                    }
+                    // Des tests d'erreur sont à ajouter quelque part !
+                    // vérification du nombre de trous et valeurs entre 0 et 9
+                }
+	        }
+            if (countNbTrou != nbTrous) {
+                System.out.println("La grille du ficher \'"
+                + fic + "\' ne contient pas " + nbTrous + " trous.");
+                return false;
+            }
+            return true;
+
+	    }
+
+    catch (IOException e) {
+	    e.printStackTrace();
+        return false;
+	}
+    } // fin saisirGrilleIncompleteFichier
+
+
+
+//============================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * MODIFICI
      * pré-requis : 0 <= nbTrous <= 81 ; g est une grille 9x9 (vide a priori)
@@ -631,7 +711,15 @@ public class SudokuBase {
         initGrilleComplete(gSecret);
         initGrilleIncomplete(nb, gSecret, gHumain);
         // saisirGrilleIncomplete(nb, gOrdi); //vrai
-        initGrilleIncomplete(nb, gSecret, gOrdi); //test ====================================================
+
+        //MODIFICI
+        if (!saisirGrilleIncompleteFichier(nb, gOrdi, "grille1.txt")) {
+            nb = 0; //ne lance pas les tours!
+        }
+        // if non valide interrompt partie......... avec boolean true or false
+
+
+        // initGrilleIncomplete(nb, gSecret, gOrdi); //test ====================================================
         initPossibles(gOrdi, valPossibles, nbValPoss);
 
         return nb;
@@ -836,18 +924,27 @@ public class SudokuBase {
         int penHum = 0, penOrdi = 0;
         int nbTrou = initPartie(gSecret, gHumain, gOrdi, valPossibles, nbValPoss);
 
+        boolean nopartie = false;
+    
+        if (nbTrou == 0) { //MODIFICI
+            nopartie = true;
+        }
+
         for (int i = 0; i<nbTrou;i++){
            penHum = penHum + tourHumain(gSecret, gHumain);
            penOrdi = penOrdi + tourOrdinateur(gOrdi, valPossibles, nbValPoss);
         }
-        if (penHum == penOrdi) { //matchnul
+        if (penHum == penOrdi && !nopartie) { //matchnul
             return 0;
         }
         else if (penHum<penOrdi){ //homme gagne
             return 1;
         }
-        else { 
+        else if (penHum>penOrdi) { 
             return 2;
+        }
+        else { // pas de partie //MODIFICI
+            return -1;
         }
 
         
@@ -867,7 +964,20 @@ public class SudokuBase {
      */
     public static void main(String[] args) {
         // ________________________________________
-        System.out.println(partie());
+        //MODIFICI
+        int res = partie();
+        if (res == 0) {
+            System.out.println("Match nul");
+        }
+        else if (res == 1) {
+            System.out.println("Vous avez gagnez. Félcitations!");
+        }
+        else if (res == 2) {
+            System.out.println("L'ordinateur a gagné. Dommage!");
+        }
+        else {
+            System.out.println("VEUILLEZ RESAISIR UNE GRILLE CORRECTE SUR LE FICHIER txt");
+        }
     } // fin main
 
 } // fin SudokuBase

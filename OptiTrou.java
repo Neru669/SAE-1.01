@@ -387,6 +387,8 @@ public class OptiTrou {
 
     } // fin initGrilleIncomplete
 
+
+
     /**
      * pré-requis : gSecret est une grille de Sudoku complète et 0 <= nbTrous <= 81
      * résultat : une grille de Sudoku incomplète pouvant être complétée en gSecret

@@ -313,19 +313,23 @@ public class IncompleteFacile {
     } // fin initGrilleComplete
 
 
-    public static void flipFlopGrille (int [][] grille) {
+    public static void flipFlopGrille (int [][] grille, int[][] gSecret) {
         Random r = new Random();
 
         for (int m = 0; m < 100; m++) {   // nombre de transfo
             int pick = r.nextInt(4);
             if (pick == 0) {
                 rotation90deg(grille);
+                rotation90deg(gSecret);
             } else if (pick == 1) {
                 symetrieHorizontal(grille);
+                symetrieHorizontal(gSecret);
             } else if (pick == 2) {
                 symetrieDiagPrin(grille);
+                symetrieDiagPrin(gSecret);
             } else {
                 echangeLignes(0, 1, grille);
+                echangeLignes(0, 1, gSecret);
             }
         }
     }
@@ -431,7 +435,7 @@ public class IncompleteFacile {
             }            
         }
 
-        flipFlopGrille(gIncomplete);
+        //flipFlopGrille(gIncomplete);
 
         return compteur; // nombre de trou
     }
@@ -442,27 +446,8 @@ public class IncompleteFacile {
     boolean[][][] valPossibles, int[][] nbValPoss) {
 
         int nbTrou = 0;
+        
         copieMatrice(gSecret, gIncomplete);
-        // for (int i = 0; i < gIncomplete.length; i++) {
-        //     for (int j = 0; j < gIncomplete.length; j++) {
-        //          if (gIncomplete[i][j] != 0) { // Verifier si rempli
-        //             int val = gIncomplete[i][j];
-        //             gIncomplete[i][j] = 0; //faire comme si ceatit un trou
-        //             initPossibles(gIncomplete, valPossibles, nbValPoss); //regarder nbvalposs de grille 
-        //             if (nbValPoss[i][j] == 1 //verifier que si devient trou, bien un trou evident
-        //                 && verifierLignesValUnique(1, i, j, nbValPoss) //verifier que les autres trous restent evidents
-        //                 && verifierColonnesValUnique(1, i, j, nbValPoss) 
-        //                 && verifierCarreValUnique(1, i, j, nbValPoss)) {
-
-        //                 nbTrou = nbTrou + 1; //compteur de trou
-        //             }
-        //             else {
-        //                 gIncomplete[i][j] = val; //sinon remettre la valeur
-        //             }
-                                     
-        //          }
-        //     }       
-        // }
 
         boolean aParcouruToutGrille = false;
         boolean aTrouverCasePourTrouEvident;
@@ -502,15 +487,15 @@ public class IncompleteFacile {
                     // condition d'arret lorsque toute la grille est parcouru i > 8.
                     if (i == 9) {
                         aParcouruToutGrille = true;
-                    }                       
+                    }
                 }
             }
-        flipFlopGrille(gIncomplete); //transformer la grille apres chaque trou evident crée 
+        flipFlopGrille(gIncomplete, gSecret); //transformer la grille apres chaque trou evident crée 
         }
 
         initPossibles(gIncomplete, valPossibles, nbValPoss);
-        afficheGrille(3, gIncomplete);
-        afficheGrille(3, nbValPoss);
+        //afficheGrille(3, gIncomplete);
+        //afficheGrille(3, nbValPoss);
         // System.out.println(nbTrou);
  
         return nbTrou;
@@ -1210,15 +1195,16 @@ public class IncompleteFacile {
         int penHum = 0, penOrdi = 0;
         int nbTrou = initPartie(gSecret, gHumain, gOrdi, valPossibles, nbValPoss, tabTrouEvident);
 
-        // afficherMat(tabTrouEvident); // test
+        //afficherMat(tabTrouEvident); // test
+        afficheGrille(3, gSecret);
 
         for (int i = 0; i < nbTrou; i++) {
             penHum = penHum + tourHumain(gSecret, gHumain);
 
-            afficheGrille(3, gOrdi); // test
-            afficheGrille(3, nbValPoss); // test
+            //afficheGrille(3, gOrdi); // test
+            //afficheGrille(3, nbValPoss); // test
             penOrdi = penOrdi + tourOrdinateur(gOrdi, valPossibles, nbValPoss, tabTrouEvident);
-            afficherMat(tabTrouEvident); // test
+            //afficherMat(tabTrouEvident); // test
             afficheGrille(3, gOrdi); // test
             afficheGrille(3, nbValPoss); // test
         }

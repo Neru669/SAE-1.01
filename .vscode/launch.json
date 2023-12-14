@@ -3,6 +3,41 @@
   "configurations": [
     {
       "type": "java",
+      "name": "SudokuBase",
+      "request": "launch",
+      "mainClass": "SudokuBase",
+      "projectName": "Sudoku_aba7dace"
+    },
+    {
+      "type": "java",
+      "name": "Eliminationvalimposs",
+      "request": "launch",
+      "mainClass": "Eliminationvalimposs",
+      "projectName": "Sudoku_aba7dace"
+    },
+    {
+      "type": "java",
+      "name": "TrouverPlusTrouEvident",
+      "request": "launch",
+      "mainClass": "TrouverPlusTrouEvident",
+      "projectName": "Sudoku_aba7dace"
+    },
+    {
+      "type": "java",
+      "name": "IncompleteFacile",
+      "request": "launch",
+      "mainClass": "IncompleteFacile",
+      "projectName": "Sudoku_aba7dace"
+    },
+    {
+      "type": "java",
+      "name": "CreationGrille",
+      "request": "launch",
+      "mainClass": "CreationGrille",
+      "projectName": "Sudoku_aba7dace"
+    },
+    {
+      "type": "java",
       "name": "TestsAutoPublics3",
       "request": "launch",
       "mainClass": "TestsAutoPublics3",

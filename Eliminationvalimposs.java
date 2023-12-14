@@ -307,23 +307,27 @@ public class Eliminationvalimposs {
         };
 
         copieMatrice(g, gComplete);
-        flipFlopGrille(gComplete);
+        //flipFlopGrille(gComplete);
 
     } // fin initGrilleComplete
 
-    public static void flipFlopGrille(int[][] grille) {
+    public static void flipFlopGrille (int [][] grille, int[][] gSecret) {
         Random r = new Random();
 
-        for (int m = 0; m < 100; m++) { // nombre de transfo
+        for (int m = 0; m < 100; m++) {   // nombre de transfo
             int pick = r.nextInt(4);
             if (pick == 0) {
                 rotation90deg(grille);
+                rotation90deg(gSecret);
             } else if (pick == 1) {
                 symetrieHorizontal(grille);
+                symetrieHorizontal(gSecret);
             } else if (pick == 2) {
                 symetrieDiagPrin(grille);
+                symetrieDiagPrin(gSecret);
             } else {
                 echangeLignes(0, 1, grille);
+                echangeLignes(0, 1, gSecret);
             }
         }
     }
@@ -429,7 +433,7 @@ public class Eliminationvalimposs {
             }
         }
 
-        flipFlopGrille(gIncomplete);
+        flipFlopGrille(gIncomplete, gSecret);
 
         return compteur; // nombre de trou
     }

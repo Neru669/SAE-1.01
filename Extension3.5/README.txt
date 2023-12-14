@@ -8,7 +8,7 @@ initPartie (nb trou est definie par initGrilleincFacile)
 
 // fonction ajoutée
 
-flipFlopGrille(int [][] grille)
+flipFlopGrille(int [][] grille, int [][] gSecret)
 VARIANTE DES FONCTIONS VERIFIER(VALUNIQUE) POUR VOIR SI YA PAS DAUTRES VALEURS AUTRES QUE INPUT (vs premiere variante qui etait
 pour verifier les doublons)
 

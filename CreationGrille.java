@@ -1052,8 +1052,8 @@ public class CreationGrille {
         int penHum = 0, penOrdi = 0;
         int nbTrou = initPartie(gSecret, gHumain, gOrdi, valPossibles, nbValPoss, tabTrouEvident);
 
-        afficherMat(tabTrouEvident); // test
-
+        //afficherMat(tabTrouEvident); // test
+        //afficheGrille(3,gSecret);
         for (int i = 0; i < nbTrou; i++) {
             penHum = penHum + tourHumain(gSecret, gHumain);
 

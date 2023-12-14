@@ -307,25 +307,29 @@ public class TrouverPlusTrouEvident {
         };
 
         copieMatrice(g, gComplete);
-        flipFlopGrille(gComplete);
+        //flipFlopGrille(gComplete);
 
 
     } // fin initGrilleComplete
 
 
-    public static void flipFlopGrille (int [][] grille) {
+    public static void flipFlopGrille (int [][] grille, int[][] gSecret) {
         Random r = new Random();
 
         for (int m = 0; m < 100; m++) {   // nombre de transfo
             int pick = r.nextInt(4);
             if (pick == 0) {
                 rotation90deg(grille);
+                rotation90deg(gSecret);
             } else if (pick == 1) {
                 symetrieHorizontal(grille);
+                symetrieHorizontal(gSecret);
             } else if (pick == 2) {
                 symetrieDiagPrin(grille);
+                symetrieDiagPrin(gSecret);
             } else {
                 echangeLignes(0, 1, grille);
+                echangeLignes(0, 1, gSecret);
             }
         }
     }
@@ -431,7 +435,7 @@ public class TrouverPlusTrouEvident {
             }            
         }
 
-        flipFlopGrille(gIncomplete);
+        flipFlopGrille(gIncomplete, gSecret);
 
         return compteur; // nombre de trou
     }
@@ -733,12 +737,12 @@ public class TrouverPlusTrouEvident {
             System.out.println("Entre un nombre entre 0 et 81. Il s'agit du nombre de trous à compléter.");
             nb = input.nextInt();
         }
+
         initGrilleComplete(gSecret);
-        initGrilleIncompleteFacile(gSecret, gHumain);
+        initGrilleIncomplete(nb, gSecret, gHumain);
         // saisirGrilleIncomplete(nb, gOrdi); //vrai
         initGrilleIncomplete(nb, gSecret, gOrdi); // test ====================================================
         initPossibles(gOrdi, valPossibles, nbValPoss);
-        initChercheTrouEvident(gOrdi, nbValPoss, tabTrouEvident);
 
         return nb;
     } // fin initPartie
@@ -1076,7 +1080,7 @@ public class TrouverPlusTrouEvident {
         int nbTrou = initPartie(gSecret, gHumain, gOrdi, valPossibles, nbValPoss, tabTrouEvident);
 
         // afficherMat(tabTrouEvident); // test
-
+        //afficheGrille(3, gSecret);
         for (int i = 0; i < nbTrou; i++) {
             penHum = penHum + tourHumain(gSecret, gHumain);
 
